@@ -10,12 +10,17 @@ website:
       - href: index.qmd
         text: Home
       - about.qmd
+      - text: "Data Viz"
+        menu: 
+        - text: "Pixar Films"
+        - href: pixarfilms.html
+        - text: "Project Gutenberg"
 
 format:
   html:
     theme: cosmo
     css: styles.css
-    toc: false
+    toc: true
 
 editor: visual
 
