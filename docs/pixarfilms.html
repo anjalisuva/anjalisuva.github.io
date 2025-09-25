@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Anjali Suva">
+<meta name="dcterms.date" content="2025-09-23">
+<meta name="description" content="Analysis of Pixar film data from TidyTuesday">
 
-<title>My first website!</title>
+<title>Pixar Films – My first website!</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -89,7 +92,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -113,14 +116,31 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">My first website!</h1>
+<h1 class="title">Pixar Films</h1>
 </div>
 
+<div>
+  <div class="description">
+    <p>Analysis of Pixar film data from TidyTuesday</p>
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Anjali Suva </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 23, 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -130,12 +150,58 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Hello! My name is ajfkhlknjali Suva and this is a website I am developing for my data science class. I am a junior at Pomona College and I am majoring in Politics, Philosophy, and Economics.</p>
-<div class="quarto-figure quarto-figure-center">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+  number film            release_date run_time film_rating
+   &lt;dbl&gt; &lt;chr&gt;           &lt;date&gt;          &lt;dbl&gt; &lt;chr&gt;      
+1      1 Toy Story       1995-11-22         81 G          
+2      2 A Bug's Life    1998-11-25         95 G          
+3      3 Toy Story 2     1999-11-24         92 G          
+4      4 Monsters, Inc.  2001-11-02         92 G          
+5      5 Finding Nemo    2003-05-30        100 G          
+6      6 The Incredibles 2004-11-05        115 PG         </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
 <figure class="figure">
-<p><img src="media/anjaliphoto.JPG" class="img-fluid quarto-figure quarto-figure-center figure-img" width="200"></p>
+<p><img src="pixarfilms_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
+</div>
+</div>
+<p>In this boxplot, I wanted to view the distribution of run times for Pixar films and see how long most Pixar films were. I chose to create a boxplot since I was only interested in one variable (the run time). According to the boxplot, the median run time was around 100 minutes, with 2 films as outliers. The graph is skewed to the right as a result.</p>
+<p>I wanted to know what the values were for the median and the first and third quartile, so I tried to wrangle the data to get the summary statistics. The tibble below shows what I found:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  average_runtime    Q1    Q3
+            &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1             100    95   106</code></pre>
+</div>
+</div>
+<p>I also wanted to see what films were the two potential outliers. To do this, I created code for a data frame using the mutate function that would alert me to any outliers if the film’s run time was over 120 minutes, a metric I obtained from the boxplot above. The tibble is shown below. One of the outliers was Luca, with a run time of 151 minutes. The other film was unknown from the data set, but after some research done using the info in the release_date column, I found out that the film was Elemental.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 27 × 4
+   film            run_time release_date potential_outlier
+   &lt;chr&gt;              &lt;dbl&gt; &lt;date&gt;       &lt;chr&gt;            
+ 1 Luca                 151 2021-06-18   Yes              
+ 2 &lt;NA&gt;                 155 2023-06-16   Yes              
+ 3 Toy Story             81 1995-11-22   No               
+ 4 A Bug's Life          95 1998-11-25   No               
+ 5 Toy Story 2           92 1999-11-24   No               
+ 6 Monsters, Inc.        92 2001-11-02   No               
+ 7 Finding Nemo         100 2003-05-30   No               
+ 8 The Incredibles      115 2004-11-05   No               
+ 9 Cars                 117 2006-06-09   No               
+10 Ratatouille          111 2007-06-29   No               
+# ℹ 17 more rows</code></pre>
+</div>
+</div>
+<p>Credits:</p>
+<p><strong>Data:</strong> TidyTuesday issue #812, Pixar Films, <a href="https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-11/readme.md" class="uri">https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-11/readme.md</a></p>
+<p><strong>Original Source:</strong> pixarfilms R package by Eric Leung, drawing data from Wikipedia and OMDb, <a href="https://github.com/erictleung/pixarfilms" class="uri">https://github.com/erictleung/pixarfilms</a></p>
 
 
 

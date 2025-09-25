@@ -2,6 +2,6 @@
 title: "My first website!"
 ---
 
-Hello! My name is Anjali Suva and this is a website I am developing for my data science class. I am a junior at Pomona College and I am majoring in Politics, Philosophy, and Economics.
+Hello! My name is ajfkhlknjali Suva and this is a website I am developing for my data science class. I am a junior at Pomona College and I am majoring in Politics, Philosophy, and Economics.
 
 ![](media/anjaliphoto.JPG){width="200px" fig-align="center"}

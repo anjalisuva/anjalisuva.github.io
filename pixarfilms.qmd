@@ -1,0 +1,58 @@
+---
+title: "Pixar Films"
+description: |
+  Analysis of Pixar film data from TidyTuesday
+author: Anjali Suva
+date: September 23, 2025
+format: html
+execute: 
+  warning: false
+  message: false
+  echo: false
+---
+
+```{r}
+
+library(tidytuesdayR)
+library(ggplot2)
+
+tuesdata <- tidytuesdayR::tt_load('2025-03-11')
+
+pixar_films <- tuesdata$pixar_films
+
+pixar_films |> head()
+
+
+ggplot(pixar_films, aes(x = run_time))+
+  geom_boxplot()+
+  labs(x ="Run time (minutes)",title ="Length of Pixar Films")
+
+```
+
+In this boxplot, I wanted to view the distribution of run times for Pixar films and see how long most Pixar films were. I chose to create a boxplot since I was only interested in one variable (the run time). According to the boxplot, the median run time was around 100 minutes, with 2 films as outliers. The graph is skewed to the right as a result.
+
+I wanted to know what the values were for the median and the first and third quartile, so I tried to wrangle the data to get the summary statistics. The tibble below shows what I found:
+
+```{r}
+
+library(dplyr)
+
+pixar_films |> 
+  summarize(average_runtime = median(run_time, na.rm = TRUE), Q1 = quantile(run_time, 0.25, na.rm = TRUE), Q3 = quantile(run_time, 0.75, na.rm = TRUE))
+
+```
+
+I also wanted to see what films were the two potential outliers. To do this, I created code for a data frame using the mutate function that would alert me to any outliers if the film's run time was over 120 minutes, a metric I obtained from the boxplot above. The tibble is shown below. One of the outliers was Luca, with a run time of 151 minutes. The other film was unknown from the data set, but after some research done using the info in the release_date column, I found out that the film was Elemental.
+
+```{r}
+pixar_films |>
+  select(film, run_time, release_date) |>
+  mutate(potential_outlier = ifelse(run_time > 120, "Yes", "No")) |>
+  arrange(desc(potential_outlier))
+```
+
+Credits:
+
+**Data:** TidyTuesday issue #812, Pixar Films, <https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-11/readme.md>
+
+**Original Source:** pixarfilms R package by Eric Leung, drawing data from Wikipedia and OMDb, <https://github.com/erictleung/pixarfilms>
