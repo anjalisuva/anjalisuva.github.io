@@ -1,12 +1,5 @@
 ---
-title: "anjalisuva.github.io"
+title: "My first website!"
 ---
 
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
-
-```
+Hello! My name is Anjali Suva and this is a website I am developing for my data science class.

@@ -3,7 +3,8 @@ project:
   output-dir: docs
 
 website:
-  title: "anjalisuva.github.io"
+  title: "My first website!"
+  image: media/anjaliphoto.JPG
   navbar:
     left:
       - href: index.qmd
@@ -14,7 +15,7 @@ format:
   html:
     theme: cosmo
     css: styles.css
-    toc: true
+    toc: false
 
 editor: visual
 
