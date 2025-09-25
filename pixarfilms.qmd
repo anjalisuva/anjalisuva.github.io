@@ -53,6 +53,6 @@ pixar_films |>
 
 Credits:
 
-**Data:** TidyTuesday issue #812, Pixar Films, <https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-11/readme.md>
+**Data:** TidyTuesday Pixar Films, <https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-11/readme.md>
 
 **Original Source:** pixarfilms R package by Eric Leung, drawing data from Wikipedia and OMDb, <https://github.com/erictleung/pixarfilms>

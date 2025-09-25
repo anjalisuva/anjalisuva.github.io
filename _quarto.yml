@@ -13,8 +13,9 @@ website:
       - text: "Data Viz"
         menu: 
         - text: "Pixar Films"
-        - href: pixarfilms.html
-        - text: "Project Gutenberg"
+          href: pixarfilms.html
+        - text: "CBP Encounters"
+          href: cbpencounters.html
 
 format:
   html:

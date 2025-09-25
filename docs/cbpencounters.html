@@ -8,9 +8,9 @@
 
 <meta name="author" content="Anjali Suva">
 <meta name="dcterms.date" content="2025-09-23">
-<meta name="description" content="Analysis of Pixar film data from TidyTuesday">
+<meta name="description" content="Analysis of Customs and Border Patrol encounters from TidyTuesday">
 
-<title>Pixar Films – My first website!</title>
+<title>CBP Encounters – My first website!</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -133,12 +133,12 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Pixar Films</h1>
+<h1 class="title">CBP Encounters</h1>
 </div>
 
 <div>
   <div class="description">
-    <p>Analysis of Pixar film data from TidyTuesday</p>
+    <p>Analysis of Customs and Border Patrol encounters from TidyTuesday</p>
   </div>
 </div>
 
@@ -169,56 +169,40 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 5
-  number film            release_date run_time film_rating
-   &lt;dbl&gt; &lt;chr&gt;           &lt;date&gt;          &lt;dbl&gt; &lt;chr&gt;      
-1      1 Toy Story       1995-11-22         81 G          
-2      2 A Bug's Life    1998-11-25         95 G          
-3      3 Toy Story 2     1999-11-24         92 G          
-4      4 Monsters, Inc.  2001-11-02         92 G          
-5      5 Finding Nemo    2003-05-30        100 G          
-6      6 The Incredibles 2004-11-05        115 PG         </code></pre>
+<pre><code># A tibble: 6 × 9
+  fiscal_year month_grouping month_abbv land_border_region   state demographic  
+        &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;      &lt;chr&gt;                &lt;chr&gt; &lt;chr&gt;        
+1        2020 FYTD           APR        Northern Land Border ID    Single Adults
+2        2020 FYTD           APR        Northern Land Border ME    Single Adults
+3        2020 FYTD           APR        Northern Land Border ME    Single Adults
+4        2020 FYTD           APR        Northern Land Border ME    Single Adults
+5        2020 FYTD           APR        Northern Land Border ME    Single Adults
+6        2020 FYTD           APR        Northern Land Border ME    Single Adults
+# ℹ 3 more variables: citizenship &lt;chr&gt;, title_of_authority &lt;chr&gt;,
+#   encounter_count &lt;dbl&gt;</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="pixarfilms_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="cbpencounters_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>In this boxplot, I wanted to view the distribution of run times for Pixar films and see how long most Pixar films were. I chose to create a boxplot since I was only interested in one variable (the run time). According to the boxplot, the median run time was around 100 minutes, with 2 films as outliers. The graph is skewed to the right as a result.</p>
-<p>I wanted to know what the values were for the median and the first and third quartile, so I tried to wrangle the data to get the summary statistics. The tibble below shows what I found:</p>
+<p>The graph above shows the number of Customs and Border Patrol encounters from 2020 to 2024 in different regions of the United States. The graph implies that the most recorded encounters within this time period took place in 2023, with more than 12500 encounters recorded. By simply glancing at the graph, I am compelled to conclude that the greatest proportion of encounters took place in the region(s) that belong to the “Other” category. Unfortunately, since the data is limited, we do not know what these specific areas may be.</p>
+<p>To check the regional proportions more accurately, I created the graph below. This takes the bar graph above but sets the y-axis to display the proportion of encounters rather than the raw count. In this graph, it is easier to identify details specific to each region. For example, 2021 is the year where the Southwest Land Border had the greatest proportion of encounters relative to other years, and 2023/2024 are the year(s) where the Northwest Land Border had the greatest proportion of encounters relative to other years.</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 3
-  average_runtime    Q1    Q3
-            &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1             100    95   106</code></pre>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="cbpencounters_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
-</div>
-<p>I also wanted to see what films were the two potential outliers. To do this, I created code for a data frame using the mutate function that would alert me to any outliers if the film’s run time was over 120 minutes, a metric I obtained from the boxplot above. The tibble is shown below. One of the outliers was Luca, with a run time of 151 minutes. The other film was unknown from the data set, but after some research done using the info in the release_date column, I found out that the film was Elemental.</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 27 × 4
-   film            run_time release_date potential_outlier
-   &lt;chr&gt;              &lt;dbl&gt; &lt;date&gt;       &lt;chr&gt;            
- 1 Luca                 151 2021-06-18   Yes              
- 2 &lt;NA&gt;                 155 2023-06-16   Yes              
- 3 Toy Story             81 1995-11-22   No               
- 4 A Bug's Life          95 1998-11-25   No               
- 5 Toy Story 2           92 1999-11-24   No               
- 6 Monsters, Inc.        92 2001-11-02   No               
- 7 Finding Nemo         100 2003-05-30   No               
- 8 The Incredibles      115 2004-11-05   No               
- 9 Cars                 117 2006-06-09   No               
-10 Ratatouille          111 2007-06-29   No               
-# ℹ 17 more rows</code></pre>
 </div>
 </div>
 <p>Credits:</p>
-<p><strong>Data:</strong> TidyTuesday Pixar Films, <a href="https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-11/readme.md" class="uri">https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-11/readme.md</a></p>
-<p><strong>Original Source:</strong> pixarfilms R package by Eric Leung, drawing data from Wikipedia and OMDb, <a href="https://github.com/erictleung/pixarfilms" class="uri">https://github.com/erictleung/pixarfilms</a></p>
+<p><strong>Data:</strong> TidyTuesday U.S. Customs and Border Protection (CBP) Encounter Data, <a href="https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-11-26/readme.md" class="uri">https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-11-26/readme.md</a></p>
+<p><strong>Original Source:</strong> U.S. Customs and Border Protection, <a href="https://www.cbp.gov/document/stats/nationwide-encounters" class="uri">https://www.cbp.gov/document/stats/nationwide-encounters</a></p>
 
 
 

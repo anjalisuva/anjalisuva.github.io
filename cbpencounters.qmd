@@ -1,0 +1,52 @@
+---
+title: "CBP Encounters"
+description: |
+  Analysis of Customs and Border Patrol encounters from TidyTuesday
+author: Anjali Suva
+date: September 23, 2025
+format: html
+execute: 
+  warning: false
+  message: false
+  echo: false
+---
+
+```{r}
+
+library(tidytuesdayR)
+library(ggplot2)
+
+tuesdata <- tidytuesdayR::tt_load('2024-11-26')
+
+cbp_state <- tuesdata$cbp_state
+
+cbp_state |> head()
+
+ggplot(cbp_state, aes(x = fiscal_year, fill = land_border_region)) +
+  geom_bar() +
+  labs(title = "Customs and Border Patrol Encounters per Year", 
+       x = "Fiscal Year (2020-2024)", 
+       y = "Number of Encounters", 
+       fill = "Land Border Region"
+       )
+```
+
+The graph above shows the number of Customs and Border Patrol encounters from 2020 to 2024 in different regions of the United States. The graph implies that the most recorded encounters within this time period took place in 2023, with more than 12500 encounters recorded. By simply glancing at the graph, I am compelled to conclude that the greatest proportion of encounters took place in the region(s) that belong to the "Other" category. Unfortunately, since the data is limited, we do not know what these specific areas may be.
+
+To check the regional proportions more accurately, I created the graph below. This takes the bar graph above but sets the y-axis to display the proportion of encounters rather than the raw count. In this graph, it is easier to identify details specific to each region. For example, 2021 is the year where the Southwest Land Border had the greatest proportion of encounters relative to other years, and 2023/2024 are the year(s) where the Northwest Land Border had the greatest proportion of encounters relative to other years.
+
+```{r}
+ggplot(cbp_state, aes(x = fiscal_year, fill = land_border_region)) +
+  geom_bar(position="fill") +
+  scale_y_continuous("Proportion of Encounters") +
+  labs(title = "Customs and Border Patrol Encounters per Year", 
+       x = "Fiscal Year (2020-2024)", 
+       y = "Number of Encounters", 
+       fill = "Land Border Region")
+```
+
+Credits:
+
+**Data:** TidyTuesday U.S. Customs and Border Protection (CBP) Encounter Data, <https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-11-26/readme.md>
+
+**Original Source:** U.S. Customs and Border Protection, <https://www.cbp.gov/document/stats/nationwide-encounters>
