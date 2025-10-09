@@ -1,0 +1,137 @@
+---
+title: "NYTimes Headlines"
+description: |
+  Analysis of NYTimes headlines from 1996 to 2005 
+author: Anjali Suva
+date: October 6, 2025
+format: html
+execute: 
+  warning: false
+  message: false
+  code-fold: true
+  code-summary: "Show the code"
+---
+
+```{r}
+
+library(RTextTools) 
+library(tidyverse)
+
+data(NYTimes)
+as_tibble(NYTimes)
+
+```
+
+With the proliferation of the internet and increase in citizens obtaining their news online, I wondered if the title length for articles had shortened over time to fit these new mediums. For my first question, I wanted to investigate whether or not the average length of NY Times article titles has changed over time.
+
+In order to do this analysis, I used str_length to obtain the number of characters in each article title.
+
+\
+
+```{r}
+
+library(lubridate)
+
+
+AvgTitleLength <- NYTimes |>
+  mutate(TitleLength = str_length(Title), 
+         Year = year(dmy(Date))) |>
+  group_by(Year) |>
+  summarize(AvgTitleLength = mean(TitleLength)) |>
+  select(Year, AvgTitleLength)
+
+as_tibble(AvgTitleLength)
+
+```
+
+```{r}
+
+library(ggplot2)
+
+ggplot(AvgTitleLength, aes(x = Year, y = AvgTitleLength)) +
+  geom_col() +
+  labs(title = "Average NYTimes Article Title Length by Year",
+       x = "Year",
+       y = "Average Title Length (in characters)")
+
+```
+
+From the graph above, it is clear that there is not much of a trend in the average title length over time. From 1996 to 2005, the average length of NYTimes article titles have been between 40 to 57 characters. The average length tends to fluctuate by each year, but there aren't enough years in the data set to identify a concrete downward trend in the length of the titles.
+
+Taking the limited sample size for year into account, I wanted to search for something more specific—a trend that was more likely to show up on a graph. Since the years included on the dataset were from the range 1996-2005, I was interested in the number of times "Iraq" was mentioned in a headline, considering that the Iraq War began in 2003. I predict that there would be a sharp upturn in the number of times Iraq was mentioned after 2001, with 2003 being the year when it was mentioned the most.
+
+In order to do this analysis, I used str_detect along with the regular expression (?i) to account for capitalized vs. non-capitalized headlines in the dataset.
+
+```{r}
+
+IraqHeadlines <- NYTimes |> 
+  mutate(Year = year(dmy(Date))) |>
+  group_by(Year) |>
+  summarize(IraqinTitle = sum(str_detect(Title, "(?i)Iraq"))) |>
+  select(Year, IraqinTitle)
+
+as_tibble(IraqHeadlines)
+```
+
+```{r}
+
+ggplot(IraqHeadlines, aes(x = Year, y = IraqinTitle)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  labs(title = "Number of Times \"Iraq\" Appeared in Headline by Year",
+       x = "Year",
+       y = "Number of Times \"Iraq\" Appeared in Headline")
+```
+
+According to the graph, there is a distinct increase in the number of times "Iraq" appears within the plot after 2001. In accordance with my prediction, the year with the greatest number of times Iraq appeared in the headline of a NYTimes article was 2003.
+
+Since the previous plot yielded expected results, I wondered how else I could utilize key words within the data set. While parsing through some of the headlines in the original NYTimes dataset, I noticed that certain titles would begin with a key word/phrase and a colon. For example, take this title from the dataset, "CRASH IN THE BALKANS: THE RESCUE; A Storm-Swept Mountain's Grim Story." The phrase "CRASH IN THE BALKANS" serves as a signifier to introduce the main subject matter of the story. I wanted to see how many of these key words or phrases existed within the data set.
+
+To do this analysis, I used str_detect to filter for rows with colons and str_extract with a lookahead to extract the key phrases I wanted.
+
+```{r}
+
+KeyPhrasesinTitle <- NYTimes |>
+  filter(str_detect(Title, ":")) |>
+  mutate(KeyPhrase = str_extract(Title, ".+(?=:)")) |>
+  filter(!is.na(KeyPhrase)) |>
+  group_by(KeyPhrase) |>
+  summarize(KeyPhraseTotal = n()) |>
+  select(KeyPhrase, KeyPhraseTotal) |>
+  arrange(desc(KeyPhraseTotal))
+
+
+as_tibble(KeyPhrasesinTitle)
+
+```
+
+According to the dataset, there are 265 key phrases that exist within the titles of the articles. The most common is "A Nation Challenged" with 45 instances of it in the dataset. This is followed by "THE 2000 CAMPAIGN", which had 32 instances of it occurring.
+
+While examining the new table, I wondered if I could filter the data even more so I could find key words in the title (as opposed to phrases). For example "POLITICS" is one of the most common introductory words in the titles of articles, with 21 instances of it occurring.
+
+In order to do this analysis, I slightly altered the code above to account for only words as opposed to words and phrases. To do this, I used the regular expressions of "\^" and "\\w" to filter for rows that started with a word followed directly by a colon.
+
+```{r}
+
+KeyWordsinTitle <- NYTimes |>
+  filter(str_detect(Title, "^\\w+:")) |>
+  mutate(KeyWord = str_extract(Title, "^\\w+(?=:)")) |>
+  filter(!is.na(KeyWord)) |>
+  group_by(KeyWord) |>
+  summarize(KeyWordTotal = n()) |>
+  select(KeyWord, KeyWordTotal) |>
+  arrange(desc(KeyWordTotal))
+
+
+as_tibble(KeyWordsinTitle)
+
+
+```
+
+After doing that, I was able to view the key introductory words that were used in the titles of the headlines, which fit neatly into this 8 row table. Unsurprisingly, the most popular key word was "POLITICS", which was easily predictable simply by examining the previous table.
+
+Credits:
+
+**Data:** RTextTools R package: [https://CRAN.R-project.org/package=RTextTools](https://cran.r-project.org/package=RTextTools)
+
+**Original Source:** Headlines from The New York Times, compiled by Professor Amber E. Boydstun at the University of California, Davis.

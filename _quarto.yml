@@ -16,6 +16,8 @@ website:
           href: pixarfilms.html
         - text: "CBP Encounters"
           href: cbpencounters.html
+        - text: "NYTimes Headlines"
+          href: nytheadlines.html
 
 format:
   html:
