@@ -134,4 +134,4 @@ Credits:
 
 **Data:** RTextTools R package: [https://CRAN.R-project.org/package=RTextTools](https://cran.r-project.org/package=RTextTools)
 
-**Original Source:** Headlines from The New York Times, compiled by Professor Amber E. Boydstun at the University of California, Davis.
+**Original Source:** Headlines from The New York Times, compiled by Professor Amber E. Boydstun at the University of California, Davis, <https://www.amber-boydstun.com/supplementary-information-for-making-the-news.html>.

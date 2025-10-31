@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Anjali Suva">
-<meta name="dcterms.date" content="2025-09-23">
-<meta name="description" content="Analysis of Pixar film data from TidyTuesday">
+<meta name="dcterms.date" content="2025-10-29">
+<meta name="description" content="Simulation study using company reputation scores from popular companies in the retail and technology industries.">
 
-<title>Pixar Films – My first website!</title>
+<title>Company Reputation Simulation Study – My first website!</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -141,12 +175,12 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Pixar Films</h1>
+<h1 class="title">Company Reputation Simulation Study</h1>
 </div>
 
 <div>
   <div class="description">
-    <p>Analysis of Pixar film data from TidyTuesday</p>
+    <p>Simulation study using company reputation scores from popular companies in the retail and technology industries.</p>
   </div>
 </div>
 
@@ -163,7 +197,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 23, 2025</p>
+      <p class="date">October 29, 2025</p>
     </div>
   </div>
   
@@ -175,58 +209,136 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>For this simulation study, I plan on taking observations found from the 2022 Axios-Harris Poll, which tracked the reputation of the most visible brands in the United States. The data set includes 100 of the most visible companies along with the industry that they operate in, their reputation score (a higher score corresponds to a better reputation) and their rank in the list.</p>
+<p>Through my preliminary observation of the data set, I noticed that the company with the best reputation in the data set was Trader Joe’s, a retail store. On the other end, a few companies with low scores included Facebook and Twitter, both part of the technology industry. Since there seemed to be more retail and technology companies in the data set compared to other sectors of the industry, I wanted to see if there was a significant difference in average reputation score between the two sectors.</p>
+<p>To begin the permutation test, I started by importing the data set from TidyTuesday:</p>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>tuesdata <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">'2022-05-31'</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>companypoll <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>poll</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(companypoll)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 5
-  number film            release_date run_time film_rating
-   &lt;dbl&gt; &lt;chr&gt;           &lt;date&gt;          &lt;dbl&gt; &lt;chr&gt;      
-1      1 Toy Story       1995-11-22         81 G          
-2      2 A Bug's Life    1998-11-25         95 G          
-3      3 Toy Story 2     1999-11-24         92 G          
-4      4 Monsters, Inc.  2001-11-02         92 G          
-5      5 Finding Nemo    2003-05-30        100 G          
-6      6 The Incredibles 2004-11-05        115 PG         </code></pre>
+<pre><code># A tibble: 500 × 8
+   company      industry `2022_rank` `2022_rq` change  year  rank    rq
+   &lt;chr&gt;        &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 Trader Joe's Retail             1      82.4     NA  2017    NA  NA  
+ 2 Trader Joe's Retail             1      82.4     NA  2018    NA  NA  
+ 3 Trader Joe's Retail             1      82.4     NA  2019    NA  78.2
+ 4 Trader Joe's Retail             1      82.4     NA  2020    NA  80.7
+ 5 Trader Joe's Retail             1      82.4     NA  2021    NA  NA  
+ 6 HEB Grocery  Retail             2      82       NA  2017    NA  NA  
+ 7 HEB Grocery  Retail             2      82       NA  2018    NA  81.1
+ 8 HEB Grocery  Retail             2      82       NA  2019    NA  82.5
+ 9 HEB Grocery  Retail             2      82       NA  2020    NA  83.1
+10 HEB Grocery  Retail             2      82       NA  2021    NA  NA  
+# ℹ 490 more rows</code></pre>
 </div>
+</div>
+<p>Because not all the columns in this data set are particularly useful for the simulation study I hope to conduct, I am going to first attempt to clean it. I want to remove the rows for companies that aren’t in the retail or technology sectors and only look at data for 2022, which are the most recent entries.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>company_poll_2022 <span class="ot">&lt;-</span> companypoll <span class="sc">|&gt;</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(industry <span class="sc">==</span> <span class="st">"Retail"</span> <span class="sc">|</span> industry <span class="sc">==</span> <span class="st">"Tech"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(company, industry, <span class="st">`</span><span class="at">2022_rank</span><span class="st">`</span>, <span class="st">`</span><span class="at">2022_rq</span><span class="st">`</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(company_poll_2022)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 37 × 4
+   company        industry `2022_rank` `2022_rq`
+   &lt;chr&gt;          &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+ 1 Trader Joe's   Retail             1      82.4
+ 2 HEB Grocery    Retail             2      82  
+ 3 Patagonia      Retail             3      81.8
+ 4 Samsung        Tech               6      80.5
+ 5 Sony           Tech              10      79.6
+ 6 IBM            Tech              11      79.5
+ 7 Microsoft      Tech              15      79  
+ 8 The Home Depot Retail            16      78.9
+ 9 Apple          Tech              21      78.6
+10 Netflix        Tech              22      78.5
+# ℹ 27 more rows</code></pre>
+</div>
+</div>
+<p>Now that the data set has been cleaned, I plan on identifying the average reputation scores for both the retail and tech industries.</p>
+<p>My Research Question: Within the United States, do popular companies in the retail industry have higher reputation scores with the American public than popular tech companies?</p>
+<p>My null hypothesis is that there is no difference in average reputation scores between the retail and tech industries.</p>
+<p>My alternative hypothesis is that the average reputation score in the retail industry is greater than in the tech industry.</p>
+<p>Part of my justification for my alternative hypothesis is based on the idea that the American public is likely to be more familiar with retail brands since they are more customer-facing (dealing in direct transactions with individual buyers). Tech companies like Facebook on the other hand, have suffered from high profile lawsuits involving data privacy and may be negatively viewed due to public distrust or unfamiliarity with technology.</p>
+<p>To begin testing my hypothesis, I want to first calculate the average reputation score between popular companies in the retail industry and the average reputation score between population companies in the technology industry. The results from the data set are below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>company_poll_2022 <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(industry <span class="sc">==</span> <span class="st">"Retail"</span> <span class="sc">|</span> industry <span class="sc">==</span> <span class="st">"Tech"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_score =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">2022_rq</span><span class="st">`</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  industry avg_score
+  &lt;chr&gt;        &lt;dbl&gt;
+1 Retail        75.2
+2 Tech          73.7</code></pre>
+</div>
+</div>
+<p>By merely looking at the observed values for means of the two industries, I can confirm that the average scores match my alternative hypothesis—the average score of the retail industry is higher than the score for the technology industry.</p>
+<p>With these observed means, I plan on using a function to randomly reassign data points to the two different groups (retail vs.&nbsp;technology). Under the null hypothesis, this random reassignment should produce test statistics similar to the observed one. Using the function below, the observations in the data set are repeatedly shuffled to create multiple “null” data sets and their averages are taken. Multiple iterations of this will generate a distribution of mean differences under the null hypothesis, which can be compared to the observed difference.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>perm_data <span class="ot">&lt;-</span> <span class="cf">function</span>(rep, data){</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(industry, <span class="st">`</span><span class="at">2022_rq</span><span class="st">`</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">score_perm =</span> <span class="fu">sample</span>(<span class="st">`</span><span class="at">2022_rq</span><span class="st">`</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">obs_avg =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">2022_rq</span><span class="st">`</span>),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">perm_avg =</span> <span class="fu">mean</span>(score_perm)) <span class="sc">|&gt;</span> </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">obs_avg_diff =</span> <span class="fu">diff</span>(obs_avg),</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">perm_avg_diff =</span> <span class="fu">diff</span>(perm_avg),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">rep =</span> rep)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now that I have a permutation function, I will run it 500 times using the map function below. This will generate 500 simulated null data sets that can be used to show the distribution of permuted mean differences on a histogram, which is included below. In the histogram, the observed average differences in the original data set is shown with a red line.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">50</span>) </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>perm_stats <span class="ot">&lt;-</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>), perm_data, <span class="at">data =</span> company_poll_2022) <span class="sc">|&gt;</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>()</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>perm_stats <span class="sc">|&gt;</span> </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> perm_avg_diff)) <span class="sc">+</span> </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span> </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> obs_avg_diff), <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Permuted Mean Differences"</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Red line: observed difference in means"</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Permuted Mean Difference (Retail Industry vs. Technology Industry)"</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Frequency"</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="pixarfilms_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="companyreputationscores_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>In this boxplot, I wanted to view the distribution of run times for Pixar films and see how long most Pixar films were. I chose to create a boxplot since I was only interested in one variable (the run time). According to the boxplot, the median run time was around 100 minutes, with 2 films as outliers. The graph is skewed to the right as a result.</p>
-<p>I wanted to know what the values were for the median and the first and third quartile, so I tried to wrangle the data to get the summary statistics. The tibble below shows what I found:</p>
+<p>Since the line is so close to the center of the distribution, it is highly likely that there is no real difference between the observed values and the expected difference under the null hypothesis. What is interesting to note is that although I initially expected Retail companies to have higher reputation scores, the observed mean difference was slightly negative in this distribution, indicating that Technology companies had marginally higher average reputation scores. However, this difference is small and likely due to random variation.</p>
+<p>To verify that there is likely no difference between the reputation scores of the two industries, I will compute the p-value below. The code below checks whether the permuted mean difference is greater than the observed one for each permutation and takes the average of all the times where the permuted mean difference was greater than the observed one.</p>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>perm_stats <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">p_val_avg =</span> <span class="fu">mean</span>(perm_avg_diff <span class="sc">&gt;</span> obs_avg_diff))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 3
-  average_runtime    Q1    Q3
-            &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1             100    95   106</code></pre>
+<pre><code># A tibble: 1 × 1
+  p_val_avg
+      &lt;dbl&gt;
+1     0.774</code></pre>
 </div>
 </div>
-<p>I also wanted to see what films were the two potential outliers. To do this, I created code for a data frame using the mutate function that would alert me to any outliers if the film’s run time was over 120 minutes, a metric I obtained from the boxplot above. The tibble is shown below. One of the outliers was Luca, with a run time of 151 minutes. The other film was unknown from the data set, but after some research done using the info in the release_date column, I found out that the film was Elemental.</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 27 × 4
-   film            run_time release_date potential_outlier
-   &lt;chr&gt;              &lt;dbl&gt; &lt;date&gt;       &lt;chr&gt;            
- 1 Luca                 151 2021-06-18   Yes              
- 2 &lt;NA&gt;                 155 2023-06-16   Yes              
- 3 Toy Story             81 1995-11-22   No               
- 4 A Bug's Life          95 1998-11-25   No               
- 5 Toy Story 2           92 1999-11-24   No               
- 6 Monsters, Inc.        92 2001-11-02   No               
- 7 Finding Nemo         100 2003-05-30   No               
- 8 The Incredibles      115 2004-11-05   No               
- 9 Cars                 117 2006-06-09   No               
-10 Ratatouille          111 2007-06-29   No               
-# ℹ 17 more rows</code></pre>
-</div>
-</div>
+<p>Since the p-value is 0.774, this means that about 74.4% of the permuted differences under the null hypothesis were greater than or equal to my observed mean difference. This is a very high p-value, so with this data, I would fail to reject the null-hypothesis.</p>
+<p>To recap, the steps of this study included 1) identifying the observed means between the two industries, 2) forming a null and alternative hypothesis based on observed data, 3) shuffling data to create a distribution of permuted mean differences between the two industries, 4) calculating the p-value for the proportion of permuted differences that are greater than or equal to the observed mean difference, and 5) interpreting the p-value in the context of the problem. The results of this process suggest that there is not enough evidence to conclude that the two industries differ in their reputation scores.</p>
+<p>Something that is important to note is that after cleaning the data set, the number of observations were reduced very significantly to 37 observations. The limited sample size may have led to a larger p-value.</p>
 <p>Credits:</p>
-<p><strong>Data:</strong> TidyTuesday Pixar Films, <a href="https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-11/readme.md" class="uri">https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-11/readme.md</a></p>
-<p><strong>Original Source:</strong> pixarfilms R package by Eric Leung, drawing data from Wikipedia and OMDb, <a href="https://github.com/erictleung/pixarfilms" class="uri">https://github.com/erictleung/pixarfilms</a></p>
+<p><strong>Data:</strong> TidyTuesday Company reputation poll, <a href="https://github.com/rfordatascience/tidytuesday/tree/main/data/2022/2022-05-31" class="uri">https://github.com/rfordatascience/tidytuesday/tree/main/data/2022/2022-05-31</a>.</p>
+<p><strong>Original Source:</strong> 2022 Axios-Harris Poll 100 Reputation Rankings, <a href="https://www.axios.com/2022/05/24/2022-axios-harris-poll-100-rankings" class="uri">https://www.axios.com/2022/05/24/2022-axios-harris-poll-100-rankings</a>.</p>
 
 
 

@@ -1,0 +1,128 @@
+---
+title: "Company Reputation Simulation Study"
+description: |
+  Simulation study using company reputation scores from popular companies in the retail and technology industries.   
+author: Anjali Suva
+date: October 29, 2025
+format: html
+execute: 
+  warning: false
+  message: false
+  code-fold: true
+  code-summary: "Show the code"
+---
+
+For this simulation study, I plan on taking observations found from the 2022 Axios-Harris Poll, which tracked the reputation of the most visible brands in the United States. The data set includes 100 of the most visible companies along with the industry that they operate in, their reputation score (a higher score corresponds to a better reputation) and their rank in the list.
+
+Through my preliminary observation of the data set, I noticed that the company with the best reputation in the data set was Trader Joe's, a retail store. On the other end, a few companies with low scores included Facebook and Twitter, both part of the technology industry. Since there seemed to be more retail and technology companies in the data set compared to other sectors of the industry, I wanted to see if there was a significant difference in average reputation score between the two sectors.
+
+To begin the permutation test, I started by importing the data set from TidyTuesday:
+
+```{r}
+
+library(tidyverse)
+
+tuesdata <- tidytuesdayR::tt_load('2022-05-31')
+companypoll <- tuesdata$poll
+
+as_tibble(companypoll)
+
+```
+
+Because not all the columns in this data set are particularly useful for the simulation study I hope to conduct, I am going to first attempt to clean it. I want to remove the rows for companies that aren't in the retail or technology sectors and only look at data for 2022, which are the most recent entries.
+
+```{r}
+
+company_poll_2022 <- companypoll |> 
+  filter(industry == "Retail" | industry == "Tech") |>
+  select(company, industry, `2022_rank`, `2022_rq`) |> 
+  distinct()
+
+as_tibble(company_poll_2022)
+
+```
+
+Now that the data set has been cleaned, I plan on identifying the average reputation scores for both the retail and tech industries.
+
+My Research Question: Within the United States, do popular companies in the retail industry have higher reputation scores with the American public than popular tech companies?
+
+My null hypothesis is that there is no difference in average reputation scores between the retail and tech industries.
+
+My alternative hypothesis is that the average reputation score in the retail industry is greater than in the tech industry.
+
+Part of my justification for my alternative hypothesis is based on the idea that the American public is likely to be more familiar with retail brands since they are more customer-facing (dealing in direct transactions with individual buyers). Tech companies like Facebook on the other hand, have suffered from high profile lawsuits involving data privacy and may be negatively viewed due to public distrust or unfamiliarity with technology.
+
+To begin testing my hypothesis, I want to first calculate the average reputation score between popular companies in the retail industry and the average reputation score between population companies in the technology industry. The results from the data set are below:
+
+```{r}
+
+company_poll_2022 |> 
+  filter(industry == "Retail" | industry == "Tech") |>
+  group_by(industry) |> 
+  summarize(avg_score = mean(`2022_rq`))
+
+```
+
+By merely looking at the observed values for means of the two industries, I can confirm that the average scores match my alternative hypothesis—the average score of the retail industry is higher than the score for the technology industry.
+
+With these observed means, I plan on using a function to randomly reassign data points to the two different groups (retail vs. technology). Under the null hypothesis, this random reassignment should produce test statistics similar to the observed one. Using the function below, the observations in the data set are repeatedly shuffled to create multiple "null" data sets and their averages are taken. Multiple iterations of this will generate a distribution of mean differences under the null hypothesis, which can be compared to the observed difference.
+
+```{r}
+
+perm_data <- function(rep, data){
+  data |> 
+    select(industry, `2022_rq`) |> 
+    mutate(score_perm = sample(`2022_rq`, replace = FALSE)) |> 
+    group_by(industry) |> 
+    summarize(obs_avg = mean(`2022_rq`),
+              perm_avg = mean(score_perm)) |> 
+    summarize(obs_avg_diff = diff(obs_avg),
+              perm_avg_diff = diff(perm_avg),
+              rep = rep)
+}
+```
+
+Now that I have a permutation function, I will run it 500 times using the map function below. This will generate 500 simulated null data sets that can be used to show the distribution of permuted mean differences on a histogram, which is included below. In the histogram, the observed average differences in the original data set is shown with a red line.
+
+```{r}
+
+set.seed(50) 
+
+perm_stats <- 
+  map(c(1:500), perm_data, data = company_poll_2022) |> 
+  list_rbind()
+
+perm_stats |> 
+  ggplot(aes(x = perm_avg_diff)) + 
+  geom_histogram() + 
+  geom_vline(aes(xintercept = obs_avg_diff), color = "red") +
+  labs(
+    title = "Distribution of Permuted Mean Differences",
+    subtitle = "Red line: observed difference in means",
+    x = "Permuted Mean Difference (Retail Industry vs. Technology Industry)",
+    y = "Frequency"
+  )
+
+```
+
+Since the line is so close to the center of the distribution, it is highly likely that there is no real difference between the observed values and the expected difference under the null hypothesis. What is interesting to note is that although I initially expected Retail companies to have higher reputation scores, the observed mean difference was slightly negative in this distribution, indicating that Technology companies had marginally higher average reputation scores. However, this difference is small and likely due to random variation.
+
+To verify that there is likely no difference between the reputation scores of the two industries, I will compute the p-value below. The code below checks whether the permuted mean difference is greater than the observed one for each permutation and takes the average of all the times where the permuted mean difference was greater than the observed one.
+
+```{r}
+
+perm_stats |> 
+  summarize(p_val_avg = mean(perm_avg_diff > obs_avg_diff))
+```
+
+Since the p-value is 0.774, this means that about 74.4% of the permuted differences under the null hypothesis were greater than or equal to my observed mean difference. This is a very high p-value, so with this data, I would fail to reject the null-hypothesis.
+
+To recap, the steps of this study included 1) identifying the observed means between the two industries, 2) forming a null and alternative hypothesis based on observed data, 3) shuffling data to create a distribution of permuted mean differences between the two industries, 4) calculating the p-value for the proportion of permuted differences that are greater than or equal to the observed mean difference, and 5) interpreting the p-value in the context of the problem. The results of this process suggest that there is not enough evidence to conclude that the two industries differ in their reputation scores.
+
+Something that is important to note is that after cleaning the data set, the number of observations were reduced very significantly to 37 observations. The limited sample size may have led to a larger p-value.
+
+Credits:
+
+**Data:** TidyTuesday Company reputation poll, <https://github.com/rfordatascience/tidytuesday/tree/main/data/2022/2022-05-31>.
+
+**Original Source:** 2022 Axios-Harris Poll 100 Reputation Rankings, <https://www.axios.com/2022/05/24/2022-axios-harris-poll-100-rankings>.

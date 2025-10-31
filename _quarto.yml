@@ -18,6 +18,8 @@ website:
           href: cbpencounters.html
         - text: "NYTimes Headlines"
           href: nytheadlines.html
+        - text: "Company Reputation Sim Study"
+          href: companyreputationscores.html
 
 format:
   html:
