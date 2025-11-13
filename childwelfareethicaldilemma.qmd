@@ -1,0 +1,16 @@
+---
+title: "Child Welfare Ethical Dilemma"
+description: |
+  Exploration of ethical dilemma involving algorithmic tool used in Allegheny County's child welfare system.   
+author: Anjali Suva
+date: November 12, 2025
+format: html
+---
+
+In Allegheny County, Pennsylvania, the Department of Human Services (DHS) utilized an algorithmic modelling tool used to predict the risk that a child will be placed in foster care two years after investigation. The Allegheny Family Screening Tool (AFST), uses personal data regarding birth, Medicaid, substance abuse, mental health, jail and probation records, among other government data sets (Ho & Burke, 2022). Using detailed personal data, the algorithm generates a risk score from 1 to 20 for each child, with 1 indicating low risk and 20 indicating very high risk. The tool is used for cases of neglect, which are separate from physical and sexual abuse and can incldue anything from inadequate housing to poor hygiene. 
+
+Critics of the algorithm cite its encoding of racial bias as evidence of its defects. According to research done by a team at Carnegie Mellon University, AFST demonstrated a pattern of flagging black children for mandatory neglect investigations at disproportionate rates compared to white children. The team also discovered that for approximately a third of the AFST’s risk scores contradicted social workers’ assessments.
+
+The United States child welfare system has a long history of discrimination against racial minorities. Several welfare workers have suggested that regardless of the developers objective attempt to assess families, racial bias inherent in the data systems used to design the algorithm will affect the way the algorithm evaluates families. 
+
+Supporters of the algorithm include the county and the developers of the algorithm, who claim that the high stakes involved in child welfare necessitate its use. On the one hand, failing to adequately flag and investigate a child’s situation could result in death. On the other hand, unnecessarily investigating families could set them up for separation. The county and developers of AFST claim that the algorithm can help separate reports of families that require intervention from baseless reports. 

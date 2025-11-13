@@ -20,6 +20,8 @@ website:
           href: nytheadlines.html
         - text: "Company Reputation Sim Study"
           href: companyreputationscores.html
+        - text: "Child Welfare Ethical Dilemma"
+          href: childwelfareethicaldilemma.html
 
 format:
   html:
