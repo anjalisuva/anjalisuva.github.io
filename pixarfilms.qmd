@@ -15,12 +15,10 @@ execute:
 
 library(tidytuesdayR)
 library(ggplot2)
+library(readr)
 
-tuesdata <- tidytuesdayR::tt_load('2025-03-11')
+pixar_films <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-03-11/pixar_films.csv")
 
-pixar_films <- tuesdata$pixar_films
-
-pixar_films |> head()
 
 
 ggplot(pixar_films, aes(x = run_time))+

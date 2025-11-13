@@ -15,12 +15,10 @@ execute:
 
 library(tidytuesdayR)
 library(ggplot2)
+library(readr)
 
-tuesdata <- tidytuesdayR::tt_load('2024-11-26')
+cbp_state <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-11-26/cbp_state.csv')
 
-cbp_state <- tuesdata$cbp_state
-
-cbp_state |> head()
 
 ggplot(cbp_state, aes(x = fiscal_year, fill = land_border_region)) +
   geom_bar() +

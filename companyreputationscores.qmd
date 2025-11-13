@@ -22,8 +22,7 @@ To begin the permutation test, I started by importing the data set from TidyTues
 
 library(tidyverse)
 
-tuesdata <- tidytuesdayR::tt_load('2022-05-31')
-companypoll <- tuesdata$poll
+companypoll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2022/2022-05-31/poll.csv')
 
 as_tibble(companypoll)
 
