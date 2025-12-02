@@ -22,7 +22,8 @@ website:
           href: companyreputationscores.html
         - text: "Child Welfare Ethical Dilemma"
           href: childwelfareethicaldilemma.html
-
+        - text: "Traffic Stop SQL Exploration"
+          href: trafficstops.html
 format:
   html:
     theme: cosmo

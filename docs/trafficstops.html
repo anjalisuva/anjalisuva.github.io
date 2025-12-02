@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Anjali Suva">
+<meta name="dcterms.date" content="2025-11-30">
+<meta name="description" content="Analysis of Stanford Open Policing Project data tables using SQL.">
 
-<title>About – My first website!</title>
+<title>Traffic/Pedestrian Stops – My first website!</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -93,7 +96,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./about.html" aria-current="page"> 
+    <a class="nav-link" href="./about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -146,14 +149,31 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">About</h1>
+<h1 class="title">Traffic/Pedestrian Stops</h1>
 </div>
 
+<div>
+  <div class="description">
+    <p>Analysis of Stanford Open Policing Project data tables using SQL.</p>
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Anjali Suva </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 30, 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -163,8 +183,287 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>About this site</p>
-<p>Nothing here yet!</p>
+<p>For this project, I plan on using the various data sets within the Stanford Open Policing Project to identify any noticeable trends or interesting features within the data for populous cities and states within the United States. Some questions I am interested in exploring is 1) whether there’s a noticeable difference in in the average age between racial groups in New York, 2) whether certain racial groups experience pedestrian stops at different rates than vehicular stops, and whether or not</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tables_in_traffic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ar_little_rock_2020_04_01</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">az_gilbert_2020_04_01</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">az_mesa_2023_01_26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">az_statewide_2020_04_01</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ca_anaheim_2020_04_01</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ca_bakersfield_2020_04_01</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ca_long_beach_2020_04_01</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ca_los_angeles_2020_04_01</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ca_oakland_2020_04_01</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ca_san_bernardino_2020_04_01</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Null</th>
+<th style="text-align: left;">Key</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">raw_row_number</td>
+<td style="text-align: left;">text</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">date</td>
+<td style="text-align: left;">date</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">time</td>
+<td style="text-align: left;">time</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">location</td>
+<td style="text-align: left;">text</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">county_name</td>
+<td style="text-align: left;">text</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">subject_age</td>
+<td style="text-align: left;">bigint(20)</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">subject_race</td>
+<td style="text-align: left;">text</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">subject_sex</td>
+<td style="text-align: left;">text</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">text</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">violation</td>
+<td style="text-align: left;">text</td>
+<td style="text-align: left;">YES</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>6 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">subject_race</th>
+<th style="text-align: right;">num_stops</th>
+<th style="text-align: right;">avg_age</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">38.2857</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">asian/pacific islander</td>
+<td style="text-align: right;">278075</td>
+<td style="text-align: right;">36.3197</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">black</td>
+<td style="text-align: right;">888696</td>
+<td style="text-align: right;">34.2881</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">hispanic</td>
+<td style="text-align: right;">553552</td>
+<td style="text-align: right;">33.6267</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">other</td>
+<td style="text-align: right;">315590</td>
+<td style="text-align: right;">34.9034</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">white</td>
+<td style="text-align: right;">5926237</td>
+<td style="text-align: right;">36.9143</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pedestrian</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">vehicular</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>5 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">subject_race</th>
+<th style="text-align: right;">ped_stops</th>
+<th style="text-align: right;">vclr_stops</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">asian/pacific islander</td>
+<td style="text-align: right;">18026</td>
+<td style="text-align: right;">187535</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">other</td>
+<td style="text-align: right;">33167</td>
+<td style="text-align: right;">304175</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">white</td>
+<td style="text-align: right;">245705</td>
+<td style="text-align: right;">1030083</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">black</td>
+<td style="text-align: right;">416681</td>
+<td style="text-align: right;">881203</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">hispanic</td>
+<td style="text-align: right;">569469</td>
+<td style="text-align: right;">1732357</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">subject_sex</th>
+<th style="text-align: right;">num_stops</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">852</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">female</td>
+<td style="text-align: right;">664250</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">1442996</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 
 
 

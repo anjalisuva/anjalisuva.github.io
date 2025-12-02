@@ -1,0 +1,81 @@
+---
+title: "Traffic/Pedestrian Stops"
+description: |
+  Analysis of Stanford Open Policing Project data tables using SQL.    
+author: Anjali Suva
+date: November 30, 2025
+format: html
+execute: 
+  warning: false
+  message: false
+  echo: false
+---
+
+For this project, I plan on using the various data sets within the Stanford Open Policing Project to identify any noticeable trends or interesting features within the data for populous cities and states within the United States. Some questions I am interested in exploring is 1) whether there's a noticeable difference in in the average age between racial groups in New York, 2) whether certain racial groups experience pedestrian stops at different rates than vehicular stops, and whether or not
+
+```{r}
+
+con_traffic <- DBI::dbConnect(
+  RMariaDB::MariaDB(),
+  dbname = "traffic",
+  host = Sys.getenv("TRAFFIC_HOST"),
+  user = Sys.getenv("TRAFFIC_USER"),
+  password = Sys.getenv("TRAFFIC_PWD")
+)
+
+```
+
+```{sql}
+#| connection: con_traffic
+
+SHOW TABLES;
+```
+
+```{sql}
+#| connection: con_traffic
+ 
+DESCRIBE ny_statewide_2020_04_01;
+
+
+```
+
+```{sql}
+#| connection: con_traffic
+
+SELECT subject_race,
+  COUNT(*) AS num_stops, 
+  AVG(subject_age) AS avg_age
+FROM ny_statewide_2020_04_01
+GROUP BY subject_race;
+```
+
+```{sql}
+#| connection: con_traffic
+
+SELECT DISTINCT type 
+FROM ca_los_angeles_2020_04_01 
+LIMIT 0, 10;
+
+```
+
+```{sql}
+#| connection: con_traffic
+
+SELECT subject_race,
+SUM(type = 'pedestrian') AS ped_stops,
+SUM(type = 'vehicular') AS vclr_stops
+FROM ca_los_angeles_2020_04_01
+GROUP BY subject_race
+ORDER BY ped_stops, vclr_stops;
+
+
+```
+
+```{sql}
+#| connection: con_traffic
+
+SELECT subject_sex,
+COUNT(*) AS num_stops
+FROM il_chicago_2023_01_26
+GROUP BY subject_sex;
+```
