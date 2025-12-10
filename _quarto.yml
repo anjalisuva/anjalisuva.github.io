@@ -27,7 +27,7 @@ website:
           href: sqlpresentation.html
 format:
   html:
-    theme: minty
+    theme: lux
     css: styles.css
     toc: true
     page-layout: full
