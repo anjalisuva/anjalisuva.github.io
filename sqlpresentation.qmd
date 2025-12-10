@@ -76,7 +76,7 @@ as_tibble(stops_props)
 
 ## Graphing the Data
 
-In order to graph the data easily, some more wrangling was necessary. I wanted to create a bar graph with side-by-side columns that reflected the differences between the proportions for each type of stop. In order to do that I needed my data table to have a column for each race, a column for stop type (which would need to be a categorical variable) and the corresponding proportions. I used pivot_longer to do this:
+In order to graph the data easily, some more wrangling was necessary. I wanted to create a bar graph with side-by-side columns that reflected the differences between the proportions for each type of stop. I used pivot_longer to do this:
 
 ```{r}
 #wrangle the data for graphing using pivot_longer

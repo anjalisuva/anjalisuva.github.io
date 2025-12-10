@@ -1281,7 +1281,7 @@ Anjali Suva
 </section>
 <section id="graphing-the-data" class="slide level2">
 <h2>Graphing the Data</h2>
-<p>In order to graph the data easily, some more wrangling was necessary. I wanted to create a bar graph with side-by-side columns that reflected the differences between the proportions for each type of stop. In order to do that I needed my data table to have a column for each race, a column for stop type (which would need to be a categorical variable) and the corresponding proportions. I used pivot_longer to do this:</p>
+<p>In order to graph the data easily, some more wrangling was necessary. I wanted to create a bar graph with side-by-side columns that reflected the differences between the proportions for each type of stop. I used pivot_longer to do this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co">#wrangle the data for graphing using pivot_longer</span></span>
 <span id="cb6-2"><a></a>stops_long <span class="ot">&lt;-</span> stops_props <span class="sc">|&gt;</span></span>
