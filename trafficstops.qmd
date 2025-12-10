@@ -61,7 +61,7 @@ GROUP BY subject_race
 ORDER BY avg_age;
 ```
 
-From the results of the data, it seems that most individuals subjected to traffic stops were around their mid-thirties. Individuals identified as Hispanic or Other had an average age that was below 35, with Hispanic individuals having the youngest average age. White individuals had the oldest average age, at 38. Although this data raises some questions, the ages are still close enough that concrete conclusions would be hard to draw. Because of this, I chose to run the same SQL chunk with a different city, Philadelphia.
+From the results of the data, it seems that individuals identified as Hispanic or Other had an average age that was below 35, with Hispanic individuals having the youngest average age. White individuals had the oldest average age, at 38. Although this data raises some questions, the ages are still close enough that concrete conclusions would be hard to draw. Because of this, I chose to run the same SQL chunk with a different city, Philadelphia.
 
 ```{sql}
 #| connection: con_traffic
@@ -75,7 +75,7 @@ ORDER BY avg_age;
 
 ```
 
-The data for Philadelphia show that Hispanic individuals subject to traffic stops had the youngest average age, similar to the data set for Nashville. However, the racial demographic with the oldest average age was Asian/Pacific Islander rather than White. As a whole, the mid-30s age ranges within the data table are very similar to the ones for Nashville.
+The data for Philadelphia show that Hispanic individuals subject to traffic stops had the youngest average age, similar to the data set for Nashville. However, the racial demographic with the oldest average age was Asian/Pacific Islander rather than White. The mid-30s age ranges within the data table appear very similar to the ones for Nashville.
 
 To determine if there is a consistent pattern of Hispanic individuals having the youngest average age within the data, I decided to run the same chunk with San Francisco.
 
@@ -93,9 +93,9 @@ ORDER BY avg_age;
 
 Similar to the previous two data queries, the query for San Francisco shows that Hispanic individuals subject to traffic stops had the youngest average age of all the racial demographics included in the data. The data for San Francisco also show that White individuals had the oldest average age, 39.
 
-This pattern is interesting because it may suggest that law enforcement may disproportionately stop Hispanic individuals at younger ages compared to individuals identified as White or Asian/Pacific Islander. While this cannot be proved by the three data tables as is, the consistency of the pattern may point to broader racial disparities within policing.
+Although the pattern is interesting to note, the data by itself cannot be used to conclusively prove differences in law enforcement interactions with individuals of different races. More analysis is required for this conclusion.
 
-I was interested in exploring more patterns related to race in the traffic stop data, so for the next query I wanted to compare whether certain racial groups experience pedestrian stops at different rates than vehicular stops. For this data set, I decided to use Los Angeles because it is one of the most populous cities in the US, and because the data set categorized each stop as vehicular versus pedestrian, which some other cities did not have. I determined this through the query below, which uses SELECT DISTINCT to return only unique rows for the "Type" column.
+I was interested in exploring more patterns related to race in the traffic stop data, so for the next query I wanted to compare whether certain racial groups experience pedestrian stops at different rates than vehicular stops. For this data set, I decided to use Los Angeles because it is one of the most populous cities in the US, and because the data set categorized each stop as vehicular versus pedestrian—a feature that other city data sets did not have. I determined this through the query below, which uses SELECT DISTINCT to return only unique rows for the "Type" column.
 
 ```{sql}
 #| connection: con_traffic
@@ -111,6 +111,7 @@ LIMIT 0, 10;
 #| output.var: "stops_by_type"
 
 SELECT subject_race,
+COUNT(*) as num_stops,
 SUM(type = 'pedestrian') AS ped_stops,
 SUM(type = 'vehicular') AS vclr_stops
 FROM ca_los_angeles_2020_04_01
@@ -137,9 +138,9 @@ ggplot(stops_by_type_adj, aes(x = subject_race, y = count, fill = stop_type)) +
 
 ```
 
-The data for Los Angeles has some interesting features. One thing that I immediately noticed with the data is that although the number of White individuals who were subject to a vehicular stop is greater than the number of Black individuals (1030083 \> 881203), the reverse was true for pedestrian stops. Black individuals experienced more pedestrian stops than White individuals. Additionally, the ratio of pedestrian stops to vehicular stops also varied quite wildly between racial groups. The Asian/Pacific Islander demographic had the lowest ratio of 0.096. This was followed by the Other demographic, with a ratio of 0.109. The ratio of pedestrian stops to vehicular stops for White individuals was also noticeably lower, 0.239. However, the ratio for black individuals was 0.473, almost 1/2. For Hispanic individuals, the ratio was 0.329.
+The data for Los Angeles has some interesting features. One thing that I immediately noticed with the data is that although the number of White individuals who were subject to a vehicular stop is greater than the number of Black individuals (1030083 \> 881203), the reverse was true for pedestrian stops. Black individuals experienced more pedestrian stops than White individuals. Additionally, the proportion of pedestrian stops to vehicular stops also varied quite wildly between racial groups. The Asian/Pacific Islander demographic had the lowest proportion of 0.096. This was followed by the Other demographic, with a proportion of 0.109. The proportion of pedestrian stops to vehicular stops for White individuals was also noticeably lower, 0.239. However, the ratio for black individuals was 0.473, almost 1/2. For Hispanic individuals, the proportion was 0.329.
 
-These ratios suggest that black and Hispanic individuals may disproportionately experience more pedestrian stops compared to other racial groups. This may explain the discrepancy between the pedestrian and vehicular stops for black individuals, since it may be harder for law enforcement to identify an individual's race while they are driving than when they are walking.
+These numbers suggest that Black and Hispanic individuals may experience more pedestrian stops compared to other racial groups. This may explain the discrepancy between the pedestrian and vehicular stops for black individuals, since it may be harder for law enforcement to identify an individual's race while they are driving than when they are walking.
 
 I wanted to continue exploring the data sets, so I decided to examine another populous city, Chicago. While examining the Chicago data set, I realized that the data set had information on the officer's age, race, sex, and years of service for each traffic stop. With these extra pieces of information, I wanted to explore the relationship between the number of years of service that an officer had and whether or not they made an arrest at a traffic stop.
 
@@ -192,7 +193,7 @@ ggplot(arrests_by_service_year_clean, aes(x = officer_years_of_service, y = arre
 
 The data in the graph appears to confirm my observations about the table. The peak number of arrests were made by officers with one year of service, and as officers have more years of service, the arrests gradually decline.
 
-This relationship can be explained due to a variety of factors. Younger officers may be more active in patrolling, causing greater numbers of arrests. Older officers may also be more selective about traffic stops or more cautious about entering potentially dangerous situations which may warrant arrests. Although these reasons are mostly speculation, the trend is interesting because it is very pronounced.
+This relationship may be due to a variety of factors, all of which cannot be proved by the data set alone but may be worth exploring. For one, there may simply be more junior officers in general, and less officers with greater years of experience. Younger officers may be more active in patrolling, causing greater numbers of arrests. Older officers may also be more selective about traffic stops or more cautious about entering potentially dangerous situations which may warrant arrests. Although these reasons are mostly speculation, the trend is interesting because it is very pronounced.
 
 In conclusion, the exploration of the data above aligns with existing understanding about racial bias within policing and the disproportionate targeting of certain racial demographics over others. While the data tables and graphs above are not enough to conclusively prove the existence of racial bias in policing, there is evidence of differences between racial groups in their interactions with law enforcement.
 

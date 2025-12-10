@@ -8,8 +8,7 @@ format: html
 execute: 
   warning: false
   message: false
-  code-fold: true
-  code-summary: "Show the code"
+  echo: true
 ---
 
 ```{r}
@@ -19,10 +18,9 @@ library(tidyverse)
 
 data(NYTimes)
 as_tibble(NYTimes)
-
 ```
 
-With the proliferation of the internet and increase in citizens obtaining their news online, I wondered if the title length for articles had shortened over time to fit these new mediums. For my first question, I wanted to investigate whether or not the average length of NY Times article titles has changed over time.
+With the increase in citizens obtaining their news online, I wondered if the title length for articles had shortened over time to fit these new mediums. For my first question, I wanted to investigate whether or not the average length of New York Times article titles has changed over time.
 
 In order to do this analysis, I used str_length to obtain the number of characters in each article title.
 
@@ -87,7 +85,7 @@ According to the graph, there is a distinct increase in the number of times "Ira
 
 Since the previous plot yielded expected results, I wondered how else I could utilize key words within the data set. While parsing through some of the headlines in the original NYTimes dataset, I noticed that certain titles would begin with a key word/phrase and a colon. For example, take this title from the dataset, "CRASH IN THE BALKANS: THE RESCUE; A Storm-Swept Mountain's Grim Story." The phrase "CRASH IN THE BALKANS" serves as a signifier to introduce the main subject matter of the story. I wanted to see how many of these key words or phrases existed within the data set.
 
-To do this analysis, I used str_detect to filter for rows with colons and str_extract with a lookahead to extract the key phrases I wanted.
+To do this analysis, I used str_detect to filter for rows with colons and str_extract with a lookahead to extract everything up to the colon.
 
 ```{r}
 

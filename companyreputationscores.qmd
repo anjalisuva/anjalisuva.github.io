@@ -14,6 +14,10 @@ execute:
 
 For this simulation study, I plan on taking observations found from the 2022 Axios-Harris Poll, which tracked the reputation of the most visible brands in the United States. The data set includes 100 of the most visible companies along with the industry that they operate in, their reputation score (a higher score corresponds to a better reputation) and their rank in the list.
 
+The poll surveyed 33,096 Americans in a nationally representative sample, asking for "nominations" for which companies were the most well-known. Poll respondents were asked which two companies have the best reputation and which two have the worst reputation. These nominations were aggregated into a single list, counting all associated brands and subsidiaries with their respective parent companies. From this master list, the 100 most nominated companies were placed on the "Most Visible" list.
+
+The "ratings" phase of the survey involved online interviews where individuals were asked to rate two companies from the "Most Visible" list with which they indicated being very or somewhat familiar.
+
 Through my preliminary observation of the data set, I noticed that the company with the best reputation in the data set was Trader Joe's, a retail store. On the other end, a few companies with low scores included Facebook and Twitter, both part of the technology industry. Since there seemed to be more retail and technology companies in the data set compared to other sectors of the industry, I wanted to see if there was a significant difference in average reputation score between the two sectors.
 
 To begin the permutation test, I started by importing the data set from TidyTuesday:
@@ -28,7 +32,10 @@ as_tibble(companypoll)
 
 ```
 
-Because not all the columns in this data set are particularly useful for the simulation study I hope to conduct, I am going to first attempt to clean it. I want to remove the rows for companies that aren't in the retail or technology sectors and only look at data for 2022, which are the most recent entries.
+In the tibble above, the variable "2022_rq" refers to each company's reputation score and the variable\
+"2022_rank" assigns each company a rank based on their position in the list—as determined by reputation score in descending order.
+
+Because not all the columns in this data set are particularly useful for the simulation study I hope to conduct, I will initially attempt to clean it. I want to remove the rows for companies that aren't in the retail or technology sectors and only look at data for 2022, which are the most recent entries.
 
 ```{r}
 
@@ -49,7 +56,7 @@ My null hypothesis is that there is no difference in average reputation scores b
 
 My alternative hypothesis is that the average reputation score in the retail industry is greater than in the tech industry.
 
-Part of my justification for my alternative hypothesis is based on the idea that the American public is likely to be more familiar with retail brands since they are more customer-facing (dealing in direct transactions with individual buyers). Tech companies like Facebook on the other hand, have suffered from high profile lawsuits involving data privacy and may be negatively viewed due to public distrust or unfamiliarity with technology.
+Part of my justification for my alternative hypothesis is based on the idea that the American public is likely to be more familiar with retail brands since they are more customer-facing (dealing in direct transactions with individual buyers). Tech companies like Facebook, on the other hand, have suffered from high profile lawsuits involving data privacy and may be negatively viewed due to public distrust or unfamiliarity with technology.
 
 To begin testing my hypothesis, I want to first calculate the average reputation score between popular companies in the retail industry and the average reputation score between population companies in the technology industry. The results from the data set are below:
 

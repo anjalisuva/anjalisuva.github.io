@@ -1,7 +1,18 @@
 ---
-title: "My first website!"
+title: "About"
+image: media/SZ0-04.jpg
+2toc: false
+about: 
+  template: solana
+  image-shape: rectangle
+  image-width: 20em
+  links:
+    - text: LinkedIn
+      href: https://www.linkedin.com/in/anjali-suva/
+    - text: GitHub
+      href: https://github.com/anjalisuva 
+    - text: Email
+      href: mailto:anjalisuva25@gmail.com
 ---
 
-Hello! My name is Anjali Suva and this is a website I am developing for my data science class. I am a junior at Pomona College and I am majoring in Politics, Philosophy, and Economics.
-
-![](media/anjaliphoto.JPG){width="200px" fig-align="center"}
+Hello! My name is Anjali Suva and I am a student at Pomona College majoring in Philosophy, Politics, and Economics. I am interested in working at the intersection of data science and policy. This website showcases some projects that I've worked on using various open-source data sets. In these projects, I've handled data transformations, visualizations, and permutation in R, and I've also explored data wrangling with SQL. Feel free to take a look around my site!

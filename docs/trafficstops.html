@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2025-11-30">
 <meta name="description" content="Analysis of Stanford Open Policing Project data tables using SQL.">
 
-<title>Traffic/Pedestrian Stops – My first website!</title>
+<title>Traffic/Pedestrian Stops – Anjali Suva</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -116,7 +116,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">My first website!</span>
+    <span class="navbar-title">Anjali Suva</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -128,10 +128,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li class="nav-item">
     <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
-<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data-viz" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -160,7 +156,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./trafficstops.html">
- <span class="dropdown-text">Traffic Stop SQL Exploration</span></a>
+ <span class="dropdown-text">SQL Traffic Stop Data Exploration</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sqlpresentation.html">
+ <span class="dropdown-text">SQL Traffic Stop Data Presentation</span></a>
   </li>  
     </ul>
   </li>
@@ -172,14 +172,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -193,7 +193,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page">
 
     <div>
     <div class="quarto-title-meta-heading">Author</div>
@@ -436,7 +436,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 </div>
 </div>
-<p>From the results of the data, it seems that most individuals subjected to traffic stops were around their mid-thirties. Individuals identified as Hispanic or Other had an average age that was below 35, with Hispanic individuals having the youngest average age. White individuals had the oldest average age, at 38. Although this data raises some questions, the ages are still close enough that concrete conclusions would be hard to draw. Because of this, I chose to run the same SQL chunk with a different city, Philadelphia.</p>
+<p>From the results of the data, it seems that individuals identified as Hispanic or Other had an average age that was below 35, with Hispanic individuals having the youngest average age. White individuals had the oldest average age, at 38. Although this data raises some questions, the ages are still close enough that concrete conclusions would be hard to draw. Because of this, I chose to run the same SQL chunk with a different city, Philadelphia.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> subject_race, </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> num_stops, </span>
@@ -489,7 +489,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 </div>
 </div>
-<p>The data for Philadelphia show that Hispanic individuals subject to traffic stops had the youngest average age, similar to the data set for Nashville. However, the racial demographic with the oldest average age was Asian/Pacific Islander rather than White. As a whole, the mid-30s age ranges within the data table are very similar to the ones for Nashville.</p>
+<p>The data for Philadelphia show that Hispanic individuals subject to traffic stops had the youngest average age, similar to the data set for Nashville. However, the racial demographic with the oldest average age was Asian/Pacific Islander rather than White. The mid-30s age ranges within the data table appear very similar to the ones for Nashville.</p>
 <p>To determine if there is a consistent pattern of Hispanic individuals having the youngest average age within the data, I decided to run the same chunk with San Francisco.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> subject_race, </span>
@@ -539,8 +539,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Similar to the previous two data queries, the query for San Francisco shows that Hispanic individuals subject to traffic stops had the youngest average age of all the racial demographics included in the data. The data for San Francisco also show that White individuals had the oldest average age, 39.</p>
-<p>This pattern is interesting because it may suggest that law enforcement may disproportionately stop Hispanic individuals at younger ages compared to individuals identified as White or Asian/Pacific Islander. While this cannot be proved by the three data tables as is, the consistency of the pattern may point to broader racial disparities within policing.</p>
-<p>I was interested in exploring more patterns related to race in the traffic stop data, so for the next query I wanted to compare whether certain racial groups experience pedestrian stops at different rates than vehicular stops. For this data set, I decided to use Los Angeles because it is one of the most populous cities in the US, and because the data set categorized each stop as vehicular versus pedestrian, which some other cities did not have. I determined this through the query below, which uses SELECT DISTINCT to return only unique rows for the “Type” column.</p>
+<p>Although the pattern is interesting to note, the data by itself cannot be used to conclusively prove differences in law enforcement interactions with individuals of different races. More analysis is required for this conclusion.</p>
+<p>I was interested in exploring more patterns related to race in the traffic stop data, so for the next query I wanted to compare whether certain racial groups experience pedestrian stops at different rates than vehicular stops. For this data set, I decided to use Los Angeles because it is one of the most populous cities in the US, and because the data set categorized each stop as vehicular versus pedestrian—a feature that other city data sets did not have. I determined this through the query below, which uses SELECT DISTINCT to return only unique rows for the “Type” column.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> <span class="kw">type</span> </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ca_los_angeles_2020_04_01</span>
@@ -569,21 +569,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="cell" data-output.var="stops_by_type">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> subject_race,</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">SUM</span>(<span class="kw">type</span> <span class="op">=</span> <span class="st">'pedestrian'</span>) <span class="kw">AS</span> ped_stops,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">SUM</span>(<span class="kw">type</span> <span class="op">=</span> <span class="st">'vehicular'</span>) <span class="kw">AS</span> vclr_stops</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ca_los_angeles_2020_04_01</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> subject_race</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> ped_stops, vclr_stops;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">as</span> num_stops,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">SUM</span>(<span class="kw">type</span> <span class="op">=</span> <span class="st">'pedestrian'</span>) <span class="kw">AS</span> ped_stops,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">SUM</span>(<span class="kw">type</span> <span class="op">=</span> <span class="st">'vehicular'</span>) <span class="kw">AS</span> vclr_stops</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ca_los_angeles_2020_04_01</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> subject_race</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> ped_stops, vclr_stops;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>stops_by_type</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>            subject_race ped_stops vclr_stops
-1 asian/pacific islander     18026     187535
-2                  other     33167     304175
-3                  white    245705    1030083
-4                  black    416681     881203
-5               hispanic    569469    1732357</code></pre>
+<pre><code>            subject_race num_stops ped_stops vclr_stops
+1 asian/pacific islander    205561     18026     187535
+2                  other    337342     33167     304175
+3                  white   1275788    245705    1030083
+4                  black   1297885    416681     881203
+5               hispanic   2301826    569469    1732357</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -604,8 +605,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>The data for Los Angeles has some interesting features. One thing that I immediately noticed with the data is that although the number of White individuals who were subject to a vehicular stop is greater than the number of Black individuals (1030083 &gt; 881203), the reverse was true for pedestrian stops. Black individuals experienced more pedestrian stops than White individuals. Additionally, the ratio of pedestrian stops to vehicular stops also varied quite wildly between racial groups. The Asian/Pacific Islander demographic had the lowest ratio of 0.096. This was followed by the Other demographic, with a ratio of 0.109. The ratio of pedestrian stops to vehicular stops for White individuals was also noticeably lower, 0.239. However, the ratio for black individuals was 0.473, almost 1/2. For Hispanic individuals, the ratio was 0.329.</p>
-<p>These ratios suggest that black and Hispanic individuals may disproportionately experience more pedestrian stops compared to other racial groups. This may explain the discrepancy between the pedestrian and vehicular stops for black individuals, since it may be harder for law enforcement to identify an individual’s race while they are driving than when they are walking.</p>
+<p>The data for Los Angeles has some interesting features. One thing that I immediately noticed with the data is that although the number of White individuals who were subject to a vehicular stop is greater than the number of Black individuals (1030083 &gt; 881203), the reverse was true for pedestrian stops. Black individuals experienced more pedestrian stops than White individuals. Additionally, the proportion of pedestrian stops to vehicular stops also varied quite wildly between racial groups. The Asian/Pacific Islander demographic had the lowest proportion of 0.096. This was followed by the Other demographic, with a proportion of 0.109. The proportion of pedestrian stops to vehicular stops for White individuals was also noticeably lower, 0.239. However, the ratio for black individuals was 0.473, almost 1/2. For Hispanic individuals, the proportion was 0.329.</p>
+<p>These numbers suggest that Black and Hispanic individuals may experience more pedestrian stops compared to other racial groups. This may explain the discrepancy between the pedestrian and vehicular stops for black individuals, since it may be harder for law enforcement to identify an individual’s race while they are driving than when they are walking.</p>
 <p>I wanted to continue exploring the data sets, so I decided to examine another populous city, Chicago. While examining the Chicago data set, I realized that the data set had information on the officer’s age, race, sex, and years of service for each traffic stop. With these extra pieces of information, I wanted to explore the relationship between the number of years of service that an officer had and whether or not they made an arrest at a traffic stop.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>DESCRIBE il_chicago_2023_01_26;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -801,7 +802,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>The data in the graph appears to confirm my observations about the table. The peak number of arrests were made by officers with one year of service, and as officers have more years of service, the arrests gradually decline.</p>
-<p>This relationship can be explained due to a variety of factors. Younger officers may be more active in patrolling, causing greater numbers of arrests. Older officers may also be more selective about traffic stops or more cautious about entering potentially dangerous situations which may warrant arrests. Although these reasons are mostly speculation, the trend is interesting because it is very pronounced.</p>
+<p>This relationship may be due to a variety of factors, all of which cannot be proved by the data set alone but may be worth exploring. For one, there may simply be more junior officers in general, and less officers with greater years of experience. Younger officers may be more active in patrolling, causing greater numbers of arrests. Older officers may also be more selective about traffic stops or more cautious about entering potentially dangerous situations which may warrant arrests. Although these reasons are mostly speculation, the trend is interesting because it is very pronounced.</p>
 <p>In conclusion, the exploration of the data above aligns with existing understanding about racial bias within policing and the disproportionate targeting of certain racial demographics over others. While the data tables and graphs above are not enough to conclusively prove the existence of racial bias in policing, there is evidence of differences between racial groups in their interactions with law enforcement.</p>
 <p>Credits:</p>
 <p><em>The Stanford Open Policing Project</em>. (2018). Openpolicing.stanford.edu. https://openpolicing.stanford.edu/</p>

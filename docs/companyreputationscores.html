@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2025-10-29">
 <meta name="description" content="Simulation study using company reputation scores from popular companies in the retail and technology industries.">
 
-<title>Company Reputation Simulation Study – My first website!</title>
+<title>Company Reputation Simulation Study – Anjali Suva</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -116,7 +116,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">My first website!</span>
+    <span class="navbar-title">Anjali Suva</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -128,10 +128,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li class="nav-item">
     <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
-<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data-viz" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -158,6 +154,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="./childwelfareethicaldilemma.html">
  <span class="dropdown-text">Child Welfare Ethical Dilemma</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./trafficstops.html">
+ <span class="dropdown-text">SQL Traffic Stop Data Exploration</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sqlpresentation.html">
+ <span class="dropdown-text">SQL Traffic Stop Data Presentation</span></a>
+  </li>  
     </ul>
   </li>
 </ul>
@@ -168,14 +172,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -189,7 +193,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page">
 
     <div>
     <div class="quarto-title-meta-heading">Author</div>
@@ -214,6 +218,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>For this simulation study, I plan on taking observations found from the 2022 Axios-Harris Poll, which tracked the reputation of the most visible brands in the United States. The data set includes 100 of the most visible companies along with the industry that they operate in, their reputation score (a higher score corresponds to a better reputation) and their rank in the list.</p>
+<p>The poll surveyed 33,096 Americans in a nationally representative sample, asking for “nominations” for which companies were the most well-known. Poll respondents were asked which two companies have the best reputation and which two have the worst reputation. These nominations were aggregated into a single list, counting all associated brands and subsidiaries with their respective parent companies. From this master list, the 100 most nominated companies were placed on the “Most Visible” list.</p>
+<p>The “ratings” phase of the survey involved online interviews where individuals were asked to rate two companies from the “Most Visible” list with which they indicated being very or somewhat familiar.</p>
 <p>Through my preliminary observation of the data set, I noticed that the company with the best reputation in the data set was Trader Joe’s, a retail store. On the other end, a few companies with low scores included Facebook and Twitter, both part of the technology industry. Since there seemed to be more retail and technology companies in the data set compared to other sectors of the industry, I wanted to see if there was a significant difference in average reputation score between the two sectors.</p>
 <p>To begin the permutation test, I started by importing the data set from TidyTuesday:</p>
 <div class="cell">
@@ -239,7 +245,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 # ℹ 490 more rows</code></pre>
 </div>
 </div>
-<p>Because not all the columns in this data set are particularly useful for the simulation study I hope to conduct, I am going to first attempt to clean it. I want to remove the rows for companies that aren’t in the retail or technology sectors and only look at data for 2022, which are the most recent entries.</p>
+<p>In the tibble above, the variable “2022_rq” refers to each company’s reputation score and the variable<br>
+“2022_rank” assigns each company a rank based on their position in the list—as determined by reputation score in descending order.</p>
+<p>Because not all the columns in this data set are particularly useful for the simulation study I hope to conduct, I will initially attempt to clean it. I want to remove the rows for companies that aren’t in the retail or technology sectors and only look at data for 2022, which are the most recent entries.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>company_poll_2022 <span class="ot">&lt;-</span> companypoll <span class="sc">|&gt;</span> </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(industry <span class="sc">==</span> <span class="st">"Retail"</span> <span class="sc">|</span> industry <span class="sc">==</span> <span class="st">"Tech"</span>) <span class="sc">|&gt;</span></span>
@@ -268,7 +276,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>My Research Question: Within the United States, do popular companies in the retail industry have higher reputation scores with the American public than popular tech companies?</p>
 <p>My null hypothesis is that there is no difference in average reputation scores between the retail and tech industries.</p>
 <p>My alternative hypothesis is that the average reputation score in the retail industry is greater than in the tech industry.</p>
-<p>Part of my justification for my alternative hypothesis is based on the idea that the American public is likely to be more familiar with retail brands since they are more customer-facing (dealing in direct transactions with individual buyers). Tech companies like Facebook on the other hand, have suffered from high profile lawsuits involving data privacy and may be negatively viewed due to public distrust or unfamiliarity with technology.</p>
+<p>Part of my justification for my alternative hypothesis is based on the idea that the American public is likely to be more familiar with retail brands since they are more customer-facing (dealing in direct transactions with individual buyers). Tech companies like Facebook, on the other hand, have suffered from high profile lawsuits involving data privacy and may be negatively viewed due to public distrust or unfamiliarity with technology.</p>
 <p>To begin testing my hypothesis, I want to first calculate the average reputation score between popular companies in the retail industry and the average reputation score between population companies in the technology industry. The results from the data set are below:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>company_poll_2022 <span class="sc">|&gt;</span> </span>

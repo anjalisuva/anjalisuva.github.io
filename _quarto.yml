@@ -3,13 +3,12 @@ project:
   output-dir: docs
 
 website:
-  title: "My first website!"
-  image: media/anjaliphoto.JPG
+  title: "Anjali Suva"
+  image: media/SZ0-04.jpg
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+      - text: "Home"
+        href: index.qmd
       - text: "Data Viz"
         menu: 
         - text: "Pixar Films"
@@ -22,13 +21,16 @@ website:
           href: companyreputationscores.html
         - text: "Child Welfare Ethical Dilemma"
           href: childwelfareethicaldilemma.html
-        - text: "Traffic Stop SQL Exploration"
+        - text: "SQL Traffic Stop Data Exploration"
           href: trafficstops.html
+        - text: "SQL Traffic Stop Data Presentation"
+          href: sqlpresentation.html
 format:
   html:
-    theme: cosmo
+    theme: lux
     css: styles.css
     toc: true
+    page-layout: full
 
 editor: visual
 
