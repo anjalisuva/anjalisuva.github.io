@@ -1,11 +1,36 @@
 ---
 title: "Themes & Formatting"
+description: |
+  Webpage for placing future themes and formatting that I'd like to do for the website. 
+author: Anjali Suva
+date: December 10, 2025
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
+execute: 
+  warning: false
+  message: false
 ---
+
+While updating my site, I realized that I wasn't too happy with the way the graphs looked with the default ggplot themes. I wondered if I could create a function that would help me create my own ggplot theme, similar to theme_milimal() in ggplot.
+
+After doing some research, I found this [article](https://rpubs.com/mclaire19/ggplot2-custom-themes) by Maddie Pickens, in which she laid out a neat tutorial on how to make a custom ggplot theme. A lot of the framing for the code was taken from the article, but I added my own elements, such as an option to change the color and code to change the grid lines for my graphs.
+
+To start off, I loaded a package that enabled me to add Google's free-for-use fonts onto ggplot. I chose to use Nunito Sans to fit the theme on my website.
+
+Next, I wrote the function that would alter theme_minimal() to suit my preferences. I assigned a font family that I could reference throughout the function for each aspect of the graphs (main title, captions, axis titles, etc). Then, I ensured the grid lines on the graphs I made would be the appropriate color and size I wanted.
+
+After I did that, I went through the various text elements on the graphs on ggplot and adjusted them. This took a bit of playing around with in order to ensure the text size was big enough.
+
+Once that was done, I placed the code into an R file on my website repository and I referenced it at the beginning of every qmd file using "source("R/theme_asuva.R")". This ensured I could use it for every graph on each webpage.
 
 ```{r}
 
+#load package for Google's fonts
 library(showtext)
 
+#add Google's free for use font
 font_add_google("Nunito Sans", "nunito")
 showtext_auto()
 
@@ -49,3 +74,7 @@ theme_asuva <- function(){
       )
 }
 ```
+
+[Credits:]{.underline}
+
+Pickens, M. (n.d.). *RPubs - Learning to create custom themes in ggplot2*. Rpubs.com. https://rpubs.com/mclaire19/ggplot2-custom-themes
