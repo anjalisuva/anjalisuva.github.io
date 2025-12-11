@@ -4,14 +4,16 @@ description: |
   Analysis of Stanford Open Policing Project data tables using SQL.    
 author: Anjali Suva
 date: November 30, 2025
-format: html
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
 execute: 
   warning: false
   message: false
-  echo: true
 ---
 
-For this project, I plan on using the various data sets within the Stanford Open Policing Project to identify any noticeable trends or interesting features within traffic stop data for three populous cities within the United States. The data sets used in this assignment all contain standardized stop data from Nashville, Philadelphia, San Francisco, Los Angeles, and Chicago. The reason I chose Nashville, Philadelphia, and San Francisco was because I wanted to perform the same query of taking the average age of the individual subjected to a traffic stop on each of these cities to compare whether or not there was a difference in the results. These cities all have data for the age of the individual subjected to the traffic stop, which some of the other data sets were missing.
+For this project, I plan on using the various data sets within the Stanford Open Policing Project to identify any interesting features within traffic stop data for cities within the United States. The data sets used in this assignment all contain standardized stop data from Nashville, Philadelphia, San Francisco, Los Angeles, and Chicago. The reason I chose Nashville, Philadelphia, and San Francisco was because I wanted to perform the same query of taking the average age of the individual subjected to a traffic stop on each of these cities to compare whether or not there was a difference in the results. These cities all have data for the age of the individual subjected to the traffic stop, which some of the other data sets were missing.
 
 I also chose Los Angeles and Chicago as other cities to examine because I wanted to explore data from larger cities. A useful feature of the Los Angeles data set was that the data set noted whether the the traffic stop was a vehicular or pedestrian one. Because of this, I am interested in comparing whether certain racial groups experience pedestrian stops at different rates than vehicular stops in Los Angeles.
 
@@ -20,10 +22,12 @@ The Chicago data set was unique because it had information on the officer's age,
 To start this project, I established a connection with the SQL database where the different data sets were located and queried the database for the various tables included in the database.
 
 ```{r}
-
+#load necessary packages + custom ggplot theme
 library(tidyverse)
 library(ggplot2)
+source("R/theme_asuva.R")
 
+#connect to SQL database
 con_traffic <- DBI::dbConnect(
   RMariaDB::MariaDB(),
   dbname = "traffic",
@@ -31,7 +35,6 @@ con_traffic <- DBI::dbConnect(
   user = Sys.getenv("TRAFFIC_USER"),
   password = Sys.getenv("TRAFFIC_PWD")
 )
-
 ```
 
 ```{sql}
@@ -45,7 +48,6 @@ SHOW TABLES;
  
 DESCRIBE tn_nashville_2020_04_01;
 
-
 ```
 
 For the first query, I wanted to examine whether there was a difference in the average age of individuals subjected to traffic stops across different racial demographics. The SQL chunk below shows the average age of individuals in Nashville sorted by race.
@@ -53,6 +55,7 @@ For the first query, I wanted to examine whether there was a difference in the a
 ```{sql}
 #| connection: con_traffic
 
+# query for average age of individuals in traffic stops by racial group
 SELECT subject_race,
   COUNT(*) AS num_stops, 
   AVG(subject_age) AS avg_age
@@ -66,6 +69,7 @@ From the results of the data, it seems that individuals identified as Hispanic o
 ```{sql}
 #| connection: con_traffic
 
+# query for average age of individuals in traffic stops by racial group in Philadelphia
 SELECT subject_race, 
   COUNT(*) AS num_stops, 
   AVG(subject_age) AS avg_age 
@@ -82,6 +86,7 @@ To determine if there is a consistent pattern of Hispanic individuals having the
 ```{sql}
 #| connection: con_traffic
 
+# query for average age of individuals in traffic stops by racial group in San Francisco
 SELECT subject_race, 
   COUNT(*) AS num_stops, 
   AVG(subject_age) AS avg_age 
@@ -100,6 +105,7 @@ I was interested in exploring more patterns related to race in the traffic stop 
 ```{sql}
 #| connection: con_traffic
 
+# query for distinct rows in column of type of traffic stop
 SELECT DISTINCT type 
 FROM ca_los_angeles_2020_04_01
 LIMIT 0, 10;
@@ -110,6 +116,7 @@ LIMIT 0, 10;
 #| connection: con_traffic
 #| output.var: "stops_by_type"
 
+#create an R output displaying the number of pedestrian stops, vehicle stops, and total stops grouped by the race of the individual stopped
 SELECT subject_race,
 COUNT(*) as num_stops,
 SUM(type = 'pedestrian') AS ped_stops,
@@ -121,24 +128,30 @@ ORDER BY ped_stops, vclr_stops;
 
 ```{r}
 
+#view r output from previous chunk
 stops_by_type
 ```
 
 ```{r}
+#| fig-alt: "Stacked bar chart of stops by race in Los Angeles, with stacks corresponding to each type of stop (vehicular vs. pedestrian)."
 
+#pivot longer so that type of stop can become a categorical variable (easier for graphing)
 stops_by_type_adj <- stops_by_type |>
   pivot_longer(cols = c(ped_stops, vclr_stops), names_to = "stop_type", values_to = "count")
 
+#graph tibble in a bar chart
 ggplot(stops_by_type_adj, aes(x = subject_race, y = count, fill = stop_type)) +
   geom_bar(stat = "identity") +
   labs(title = "Stops by Race and Stop Type in Los Angeles",
     x = "Subject Race",
     y = "Number of Stops",
-    fill = "Stop Type")
-
+    fill = "Stop Type") +
+  theme_asuva()
 ```
 
-The data for Los Angeles has some interesting features. One thing that I immediately noticed with the data is that although the number of White individuals who were subject to a vehicular stop is greater than the number of Black individuals (1030083 \> 881203), the reverse was true for pedestrian stops. Black individuals experienced more pedestrian stops than White individuals. Additionally, the proportion of pedestrian stops to vehicular stops also varied quite wildly between racial groups. The Asian/Pacific Islander demographic had the lowest proportion of 0.096. This was followed by the Other demographic, with a proportion of 0.109. The proportion of pedestrian stops to vehicular stops for White individuals was also noticeably lower, 0.239. However, the ratio for black individuals was 0.473, almost 1/2. For Hispanic individuals, the proportion was 0.329.
+The data for Los Angeles has some interesting features. One thing that I immediately noticed with the data is that although the number of White individuals who were subject to a vehicular stop is greater than the number of Black individuals (1030083 \> 881203), the reverse was true for pedestrian stops. Black individuals experienced more pedestrian stops than White individuals.
+
+Additionally, the proportion of pedestrian stops to vehicular stops also varied quite wildly between racial groups. The Asian/Pacific Islander demographic had the lowest proportion of pedestrian stops, 0.088. This was followed by the Other demographic, with a proportion of 0.098. The proportion of pedestrian stops for White individuals was also noticeably lower, 0.193. However, the proportion for black individuals was 0.321, noticeably higher. For Hispanic individuals, the proportion was 0.247.
 
 These numbers suggest that Black and Hispanic individuals may experience more pedestrian stops compared to other racial groups. This may explain the discrepancy between the pedestrian and vehicular stops for black individuals, since it may be harder for law enforcement to identify an individual's race while they are driving than when they are walking.
 
@@ -154,6 +167,7 @@ DESCRIBE il_chicago_2023_01_26;
 #| connection: con_traffic
 #| output.var: "arrests_by_service_year"
 
+#create an R output displaying number of arrests by each year of service 
 SELECT officer_years_of_service, 
   COUNT(*) AS arrests
 FROM il_chicago_2023_01_26
@@ -164,6 +178,7 @@ ORDER BY officer_years_of_service;
 
 ```{r}
 
+#disconnect from SQL database 
 DBI::dbDisconnect(con_traffic, shutdown = TRUE)
 ```
 
@@ -180,24 +195,29 @@ When examining the data in the table, I noticed that there was something strange
 Although the table has around 50 rows, several observations can be made just by parsing through the rows. Something of note is that the greatest number of arrests occurred by officers with 1 year of service. After one year, the number of arrests appears to decrease sharply and gradually decrease as the number of years of service increases. In order to see this trend more easily, I decided to graph the table with ggplot as a line graph.
 
 ```{r}
+#| fig-alt: "Line chart depicting arrests by officer years of service, with a peak at 1 year of service."
+
+#cleaning out illogical rows 
 arrests_by_service_year_clean <- arrests_by_service_year |>
   filter(officer_years_of_service < 100)
 
+#plot number of arrests and officer years in a line plot
 ggplot(arrests_by_service_year_clean, aes(x = officer_years_of_service, y = arrests)) +
-  geom_line() +
-  geom_point() +
+  geom_line(color = "mistyrose4") +
+  geom_point(color = "mistyrose4") +
   labs(title = "Arrests by Officer Years of Service",
   x = "Officer Years of Service",
-  y = "Number of Arrests") 
+  y = "Number of Arrests") +
+  theme_asuva()
 ```
 
 The data in the graph appears to confirm my observations about the table. The peak number of arrests were made by officers with one year of service, and as officers have more years of service, the arrests gradually decline.
 
-This relationship may be due to a variety of factors, all of which cannot be proved by the data set alone but may be worth exploring. For one, there may simply be more junior officers in general, and less officers with greater years of experience. Younger officers may be more active in patrolling, causing greater numbers of arrests. Older officers may also be more selective about traffic stops or more cautious about entering potentially dangerous situations which may warrant arrests. Although these reasons are mostly speculation, the trend is interesting because it is very pronounced.
+This relationship may be due to a variety of factors, all of which cannot be proved by the data set alone but may be worth exploring. For one, there may simply be more junior officers in general, and less officers with greater years of experience. Other reasons may be that younger officers may be more active in patrolling, causing greater numbers of arrests. Older officers may also be more selective about traffic stops or more cautious about entering potentially dangerous situations which may warrant arrests. Although these reasons are speculation, the trend is interesting because it is very pronounced.
 
-In conclusion, the exploration of the data above aligns with existing understanding about racial bias within policing and the disproportionate targeting of certain racial demographics over others. While the data tables and graphs above are not enough to conclusively prove the existence of racial bias in policing, there is evidence of differences between racial groups in their interactions with law enforcement.
+In conclusion, the exploration of the data above suggest the existence of racial disparities within policing. While the data tables and graphs above are not enough to conclusively prove the existence of racial bias in policing, there is evidence of differences between racial groups in their interactions with law enforcement.
 
-Credits:
+[Credit:]{.underline}
 
 *The Stanford Open Policing Project*. (2018). Openpolicing.stanford.edu. https://openpolicing.stanford.edu/
 
