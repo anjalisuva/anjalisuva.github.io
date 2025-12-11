@@ -20,7 +20,7 @@ To start off my exploration, I plan on graphing the raw numbers of Customs and B
 ```{r}
 #| fig-alt: "Stacked bar chart of U.S. Customs and Border Patrol encounters grouped by year and stacked by Land Border Region (Northern Land Border, Southern Land Border, and Other)."
 
-#installing necessary packages for my data exploration 
+#load necessary packages for my data exploration 
 library(tidytuesdayR)
 library(ggplot2)
 source("R/theme_asuva.R")
@@ -36,6 +36,7 @@ ggplot(cbp_state, aes(x = fiscal_year, fill = land_border_region)) +
        x = "Fiscal Year (2020-2024)", 
        y = "Number of Encounters", 
        fill = "Land Border Region") +
+  scale_fill_manual(values = c("rosybrown2", "rosybrown3","rosybrown4")) +
     theme_asuva()
 ```
 
@@ -46,7 +47,7 @@ To check the regional proportions more accurately, I created the graph below. Th
 ```{r}
 #| fig-alt: "Stacked bar chart showing proportions of U.S. Customs and Border Patrol encounters grouped by year and stacked by Land Border Region (Northern Land Border, Southern Land Border, and Other)."
 
-
+#graph the bar chart
 ggplot(cbp_state, aes(x = fiscal_year, fill = land_border_region)) +
   geom_bar(position="fill") +
   scale_y_continuous("Proportion of Encounters") +

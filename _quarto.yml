@@ -12,6 +12,8 @@ website:
     left:
       - text: "Home"
         href: index.qmd
+      - text: "Themes & Formatting"
+        href: themesandformatting.html
       - text: "Data Viz"
         menu: 
         - text: "Pixar Films"
@@ -28,6 +30,7 @@ website:
           href: trafficstops.html
         - text: "SQL Traffic Stop Data Presentation"
           href: sqlpresentation.html
+
 format:
   html:
     theme: lux

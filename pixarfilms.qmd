@@ -20,11 +20,11 @@ For my initial exploration, I decided to visualize the distribution of run times
 ```{r}
 #| fig-alt: "Box plot of Pixar films by run time, where median run time is around 100 minutes with two outliers."
 
-#installing necessary packages for my data exploration 
+#load necessary packages for my data exploration + custom ggplot theme
 library(tidytuesdayR)
 library(ggplot2)
-source("R/theme_asuva.R")
 library(readr)
+source("R/theme_asuva.R")
 
 #loading the data set
 pixar_films <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-03-11/pixar_films.csv")

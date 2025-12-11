@@ -20,6 +20,7 @@ For this project, I used a data set containing containing string data to see if 
 #load R packages + data
 library(RTextTools) 
 library(tidyverse)
+source("R/theme_asuva.R")
 
 data(NYTimes)
 as_tibble(NYTimes)
@@ -50,11 +51,10 @@ as_tibble(AvgTitleLength)
 
 #loading ggplot and my custom theme
 library(ggplot2)
-source("R/theme_asuva.R")
 
 #create bar chart of avg NYT article title length 
 ggplot(AvgTitleLength, aes(x = Year, y = AvgTitleLength)) +
-  geom_col(fill = "mistyrose3") +
+  geom_col(fill = "rosybrown3") +
   labs(title = "Average NYTimes Article Title Length by Year",
        x = "Year",
        y = "Average Title Length (in characters)") +
@@ -86,7 +86,7 @@ as_tibble(IraqHeadlines)
 #graph previous tibble
 ggplot(IraqHeadlines, aes(x = Year, y = IraqinTitle)) +
   geom_point() +
-  geom_smooth(se = FALSE, color = "mistyrose3") +
+  geom_smooth(se = FALSE, color = "rosybrown3") +
   labs(title = "Number of Times \"Iraq\" Appeared in Headline by Year",
        x = "Year",
        y = "Number of Times \"Iraq\" Appeared in Headline") +

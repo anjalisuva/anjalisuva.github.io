@@ -146,6 +146,7 @@ ggplot(stops_by_type_adj, aes(x = subject_race, y = count, fill = stop_type)) +
     x = "Subject Race",
     y = "Number of Stops",
     fill = "Stop Type") +
+  scale_fill_manual(values = c("rosybrown2", "rosybrown3")) +
   theme_asuva()
 ```
 
