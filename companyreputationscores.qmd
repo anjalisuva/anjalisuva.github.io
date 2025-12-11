@@ -4,12 +4,13 @@ description: |
   Simulation study using company reputation scores from popular companies in the retail and technology industries.   
 author: Anjali Suva
 date: October 29, 2025
-format: html
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
 execute: 
   warning: false
   message: false
-  code-fold: true
-  code-summary: "Show the code"
 ---
 
 For this simulation study, I plan on taking observations found from the 2022 Axios-Harris Poll, which tracked the reputation of the most visible brands in the United States. The data set includes 100 of the most visible companies along with the industry that they operate in, their reputation score (a higher score corresponds to a better reputation) and their rank in the list.
@@ -23,13 +24,13 @@ Through my preliminary observation of the data set, I noticed that the company w
 To begin the permutation test, I started by importing the data set from TidyTuesday:
 
 ```{r}
-
+#import data set + custom ggplot theme
 library(tidyverse)
+source("R/theme_asuva.R")
 
 companypoll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2022/2022-05-31/poll.csv')
 
 as_tibble(companypoll)
-
 ```
 
 In the tibble above, the variable "2022_rq" refers to each company's reputation score and the variable\
@@ -39,6 +40,7 @@ Because not all the columns in this data set are particularly useful for the sim
 
 ```{r}
 
+#filter for companies that are in retail or tech and for 2022 data  
 company_poll_2022 <- companypoll |> 
   filter(industry == "Retail" | industry == "Tech") |>
   select(company, industry, `2022_rank`, `2022_rq`) |> 
@@ -62,6 +64,7 @@ To begin testing my hypothesis, I want to first calculate the average reputation
 
 ```{r}
 
+#calculate avg reputation score b/t popular companies in retail industry and tech industry
 company_poll_2022 |> 
   filter(industry == "Retail" | industry == "Tech") |>
   group_by(industry) |> 
@@ -75,6 +78,7 @@ With these observed means, I plan on using a function to randomly reassign data 
 
 ```{r}
 
+#create function to repeatedly shuffle data points 
 perm_data <- function(rep, data){
   data |> 
     select(industry, `2022_rq`) |> 
@@ -88,26 +92,30 @@ perm_data <- function(rep, data){
 }
 ```
 
-Now that I have a permutation function, I will run it 500 times using the map function below. This will generate 500 simulated null data sets that can be used to show the distribution of permuted mean differences on a histogram, which is included below. In the histogram, the observed average differences in the original data set is shown with a red line.
+Now that I have a permutation function, I will run it 500 times using the map function below. This will generate 500 simulated null data sets that can be used to show the distribution of permuted mean differences on a histogram, which is included below. In the histogram, the observed average difference in the original data set is shown with a brown line.
 
 ```{r}
+#| fig-alt: "Histogram depicting the distribution of permuted mean differences between reputation scores of retail companies and reputation scores of technology companies, with the observed average difference displayed as a brown line."
 
+#ensure data is reproducible
 set.seed(50) 
 
+#iterate function 500 times using map 
 perm_stats <- 
   map(c(1:500), perm_data, data = company_poll_2022) |> 
   list_rbind()
 
+#graph the distribution of permuted mean differences on a histogram 
 perm_stats |> 
   ggplot(aes(x = perm_avg_diff)) + 
-  geom_histogram() + 
-  geom_vline(aes(xintercept = obs_avg_diff), color = "red") +
+  geom_histogram(fill = "mistyrose2") + 
+  geom_vline(aes(xintercept = obs_avg_diff), color = "mistyrose4") +
   labs(
     title = "Distribution of Permuted Mean Differences",
-    subtitle = "Red line: observed difference in means",
+    subtitle = "Brown line: observed difference in means",
     x = "Permuted Mean Difference (Retail Industry vs. Technology Industry)",
-    y = "Frequency"
-  )
+    y = "Frequency") +
+  theme_asuva()
 
 ```
 
@@ -116,7 +124,7 @@ Since the line is so close to the center of the distribution, it is highly likel
 To verify that there is likely no difference between the reputation scores of the two industries, I will compute the p-value below. The code below checks whether the permuted mean difference is greater than the observed one for each permutation and takes the average of all the times where the permuted mean difference was greater than the observed one.
 
 ```{r}
-
+#compute p value 
 perm_stats |> 
   summarize(p_val_avg = mean(perm_avg_diff > obs_avg_diff))
 ```
@@ -127,7 +135,7 @@ To recap, the steps of this study included 1) identifying the observed means bet
 
 Something that is important to note is that after cleaning the data set, the number of observations were reduced very significantly to 37 observations. The limited sample size may have led to a larger p-value.
 
-Credits:
+[Credits:]{.underline}
 
 **Data:** TidyTuesday Company reputation poll, <https://github.com/rfordatascience/tidytuesday/tree/main/data/2022/2022-05-31>.
 
