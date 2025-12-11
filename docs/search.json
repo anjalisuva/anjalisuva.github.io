@@ -67,7 +67,7 @@
     "href": "sqlpresentation.html#context",
     "title": "SQL Traffic Stop Data Exploration",
     "section": "Context",
-    "text": "Context\nMy Question: How do the proportions of pedestrian and vehicular police stops differ across racial groups?\nFor this data set, I decided to use Los Angeles for two reasons 1) it’s very populous, and 2) the data set categorized each stop as vehicular versus pedestrian. This was a feature that other city data sets did not have.\nTo begin my exploration, I set up a SQL connection with the SQL database where Stanford Open Policing Project data was located.\n\nlibrary(tidyverse)\nlibrary(ggplot2)\n\ncon_traffic &lt;- DBI::dbConnect(\n  RMariaDB::MariaDB(),\n  dbname = \"traffic\",\n  host = Sys.getenv(\"TRAFFIC_HOST\"),\n  user = Sys.getenv(\"TRAFFIC_USER\"),\n  password = Sys.getenv(\"TRAFFIC_PWD\")\n)"
+    "text": "Context\nMy Question: How do the proportions of pedestrian and vehicular police stops differ across racial groups?\nFor this data set, I decided to use Los Angeles for two reasons 1) it’s very populous, and 2) the data set categorized each stop as vehicular versus pedestrian. This was a feature that other city data sets did not have.\nTo begin my exploration, I set up a SQL connection with the SQL database where Stanford Open Policing Project data was located.\n\nlibrary(tidyverse)\n\ncon_traffic &lt;- DBI::dbConnect(\n  RMariaDB::MariaDB(),\n  dbname = \"traffic\",\n  host = Sys.getenv(\"TRAFFIC_HOST\"),\n  user = Sys.getenv(\"TRAFFIC_USER\"),\n  password = Sys.getenv(\"TRAFFIC_PWD\")\n)"
   },
   {
     "objectID": "sqlpresentation.html#initial-query",
@@ -88,7 +88,7 @@
     "href": "sqlpresentation.html#graphing-the-data",
     "title": "SQL Traffic Stop Data Exploration",
     "section": "Graphing the Data",
-    "text": "Graphing the Data\nIn order to graph the data easily, some more wrangling was necessary. I wanted to create a bar graph with side-by-side columns that reflected the differences between the proportions for each type of stop. I used pivot_longer to do this:\n\n#wrangle the data for graphing using pivot_longer\nstops_long &lt;- stops_props |&gt;\n  select(subject_race, ped_prop, vclr_prop) |&gt;\n  pivot_longer(cols = c(ped_prop, vclr_prop), names_to = \"stop_type\", values_to = \"proportion\")\n\n#graph data as bar graph\nggplot(stops_long, aes(x = subject_race, y = proportion, fill = stop_type)) +\n  geom_col(position = \"dodge\") +\n  labs(title = \"Proportion of Stops by Race and Stop Type\",\n       x = \"Race\",\n       y = \"Proportion\",\n       fill = \"Stop Type\")"
+    "text": "Graphing the Data\nIn order to graph the data easily, some more wrangling was necessary. I wanted to create a bar graph with side-by-side columns that reflected the differences between the proportions for each type of stop. I used pivot_longer to do this:\n\nlibrary(ggplot2)\nsource(\"R/theme_asuva.R\")\n\n#wrangle the data for graphing using pivot_longer\nstops_long &lt;- stops_props |&gt;\n  select(subject_race, ped_prop, vclr_prop) |&gt;\n  pivot_longer(cols = c(ped_prop, vclr_prop), names_to = \"stop_type\", values_to = \"proportion\")\n\n#graph data as bar graph\nggplot(stops_long, aes(x = subject_race, y = proportion, fill = stop_type)) +\n  geom_col(position = \"dodge\") +\n  labs(title = \"Proportion of Stops by Race and Stop Type\",\n       x = \"Race\",\n       y = \"Proportion\",\n       fill = \"Stop Type\") +\n  scale_fill_manual(values = c(\"rosybrown2\", \"rosybrown4\")) +\n  theme_asuva()"
   },
   {
     "objectID": "sqlpresentation.html#conclusions",
@@ -110,5 +110,12 @@
     "title": "SQL Traffic Stop Data Exploration",
     "section": "Data Sources",
     "text": "Data Sources\nThe Stanford Open Policing Project. (2018). Openpolicing.stanford.edu. https://openpolicing.stanford.edu/\nPierson, Emma, Camelia Simoiu, Jan Overgoor, Sam Corbett-Davies, Daniel Jenson, Amy Shoemaker, Vignesh Ramachandran, et al. 2020. “A Large-Scale Analysis of Racial Disparities in Police Stops Across the United States.” Nature Human Behaviour, 1–10."
+  },
+  {
+    "objectID": "sqlpresentation.html#graph",
+    "href": "sqlpresentation.html#graph",
+    "title": "SQL Traffic Stop Data Exploration",
+    "section": "Graph",
+    "text": "Graph"
   }
 ]

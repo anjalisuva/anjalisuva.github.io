@@ -14,6 +14,8 @@ execute:
   message: false
 ---
 
+
+
 ## Context
 
 My Question: How do the proportions of pedestrian and vehicular police stops differ across racial groups?
@@ -21,6 +23,8 @@ My Question: How do the proportions of pedestrian and vehicular police stops dif
 For this data set, I decided to use Los Angeles for two reasons 1) it's very populous, and 2) the data set categorized each stop as vehicular versus pedestrian. This was a feature that other city data sets did not have.
 
 To begin my exploration, I set up a SQL connection with the SQL database where Stanford Open Policing Project data was located.
+
+
 
 ```{r}
 
@@ -36,9 +40,13 @@ con_traffic <- DBI::dbConnect(
 
 ```
 
+
+
 ## Initial Query
 
 Next, I aimed to create an R output (a tibble) that would display the number of pedestrian stops, vehicle stops, and total stops grouped by the race of the individual stopped. I used the SQL chunk below to parse through and create my R tibble.
+
+
 
 ```{sql}
 #| connection: con_traffic 
@@ -53,15 +61,23 @@ GROUP BY subject_race
 ORDER BY ped_stops, vclr_stops;
 ```
 
+
+
 After obtaining the output, I disconnected from the SQL database
+
+
 
 ```{r}
 DBI::dbDisconnect(con_traffic, shutdown = TRUE)
 ```
 
+
+
 ## Wrangling in R
 
 Once I had the raw counts as a data table in R, I wanted to wrangle with the data to get the proportions for each type of stop. I also decided to create a column for the difference between the proportion of individuals that experienced a vehicular stop and the proportion that experienced a pedestrian stop for each race.
+
+
 
 ```{r}
 #create columns for proportions and differences b/t proportions
@@ -73,9 +89,13 @@ stops_props <- stops_by_type |>
 as_tibble(stops_props)
 ```
 
+
+
 ## Graphing the Data
 
 In order to graph the data easily, some more wrangling was necessary. I wanted to create a bar graph with side-by-side columns that reflected the differences between the proportions for each type of stop. I used pivot_longer to do this:
+
+
 
 ```{r}
 
@@ -98,6 +118,8 @@ ggplot(stops_long, aes(x = subject_race, y = proportion, fill = stop_type)) +
   theme_asuva()
 
 ```
+
+
 
 ## Graph 
 
@@ -122,3 +144,4 @@ Although this analysis is not enough to conclusively claim that racial bias exis
 *The Stanford Open Policing Project*. (2018). Openpolicing.stanford.edu. https://openpolicing.stanford.edu/
 
 Pierson, Emma, Camelia Simoiu, Jan Overgoor, Sam Corbett-Davies, Daniel Jenson, Amy Shoemaker, Vignesh Ramachandran, et al. 2020. “A Large-Scale Analysis of Racial Disparities in Police Stops Across the United States.” Nature Human Behaviour, 1–10.
+
