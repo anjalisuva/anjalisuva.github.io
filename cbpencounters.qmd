@@ -55,6 +55,7 @@ ggplot(cbp_state, aes(x = fiscal_year, fill = land_border_region)) +
        x = "Fiscal Year (2020-2024)", 
        y = "Number of Encounters", 
        fill = "Land Border Region") +
+  scale_fill_manual(values = c("rosybrown2", "rosybrown3","rosybrown4")) +
   theme_asuva()
 ```
 
