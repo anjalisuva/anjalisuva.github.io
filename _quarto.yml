@@ -1,6 +1,9 @@
 project:
   type: website
   output-dir: docs
+  
+execute:
+  setup: "R/theme_asuva.R"
 
 website:
   title: "Anjali Suva"

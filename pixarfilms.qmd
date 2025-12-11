@@ -4,32 +4,42 @@ description: |
   Analysis of Pixar film data from TidyTuesday
 author: Anjali Suva
 date: September 23, 2025
-format: html
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
 execute: 
   warning: false
   message: false
-  echo: false
 ---
 
-```{r}
+For this first mini-project, I wanted to examine data from a TidyTuesday data set on Pixar films. The data set provides information on the name of the film, order of release, the date the film premiered, run time, and the film's rating based on the Motion Picture Association (MPA)'s rating system. More information on the data set can be found from the sources, linked below.
 
+For my initial exploration, I decided to visualize the distribution of run times for Pixar films. Since I'm only interested in one variable, I chose to create a boxplot.
+
+```{r}
+#| fig-alt: "Box plot of Pixar films by run time, where median run time is around 100 minutes with two outliers."
+
+#installing necessary packages for my data exploration 
 library(tidytuesdayR)
 library(ggplot2)
+source("R/theme_asuva.R")
 library(readr)
 
+#loading the data set
 pixar_films <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-03-11/pixar_films.csv")
 
-
-
+#creating a box plot for film length 
 ggplot(pixar_films, aes(x = run_time))+
-  geom_boxplot()+
-  labs(x ="Run time (minutes)",title ="Length of Pixar Films")
+  geom_boxplot(color="#5e4a4a")+
+  labs(x ="Run time (minutes)",title ="Length of Pixar Films") +
+  theme_asuva()
 
 ```
 
-In this boxplot, I wanted to view the distribution of run times for Pixar films and see how long most Pixar films were. I chose to create a boxplot since I was only interested in one variable (the run time). According to the boxplot, the median run time was around 100 minutes, with 2 films as outliers. The graph is skewed to the right as a result.
+According to the boxplot, the median run time for Pixar films was around 100 minutes. Two films in the set are outliers, causing the graph to skew right.
 
-I wanted to know what the values were for the median and the first and third quartile, so I tried to wrangle the data to get the summary statistics. The tibble below shows what I found:
+I wanted to know what the values were for the median and the first and third quartile, so I wrangled the data to get the summary statistics. The tibble below shows what I found:
 
 ```{r}
 
@@ -40,7 +50,7 @@ pixar_films |>
 
 ```
 
-I also wanted to see what films were the two potential outliers. To do this, I created code for a data frame using the mutate function that would alert me to any outliers if the film's run time was over 120 minutes, a metric I obtained from the boxplot above. The tibble is shown below. One of the outliers was Luca, with a run time of 151 minutes. The other film was unknown from the data set, but after some research done using the info in the release_date column, I found out that the film was Elemental.
+I also wanted to see what films were the two potential outliers in the box plot. To do this, I created code for a data frame using the mutate function that would alert me to any outliers if the film's run time was over 120 minutes, a metric I obtained from the boxplot above. The tibble is shown below. One of the outliers was *Luca*, with a run time of 151 minutes. The other film was unknown from the data set, but after some research done using the info in the release_date column, I found out that the film was *Elemental*.
 
 ```{r}
 pixar_films |>
@@ -49,7 +59,7 @@ pixar_films |>
   arrange(desc(potential_outlier))
 ```
 
-Credits:
+[Credits:]{.underline}
 
 **Data:** TidyTuesday Pixar Films, <https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-11/readme.md>
 
