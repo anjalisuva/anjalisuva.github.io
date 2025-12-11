@@ -4,46 +4,62 @@ description: |
   Analysis of Customs and Border Patrol encounters from TidyTuesday
 author: Anjali Suva
 date: September 23, 2025
-format: html
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
 execute: 
   warning: false
   message: false
-  echo: false
 ---
 
-```{r}
+For this project, I wanted to examine data from another TidyTuesday data set. This data set holds U.S. Customs and Border Patrol encounter data for fiscal years 2020 to 2024, taken from live CBP systems and data sources. The data set includes data by region, categorized by Northern Land Border, Southwest Land Border, and Nationwide (air, land, and sea modes of transportation) encounters.
 
+To start off my exploration, I plan on graphing the raw numbers of Customs and Border Patrol encounters from 2020 to 2024 in different regions of the United States in a bar chart.
+
+```{r}
+#| fig-alt: "Stacked bar chart of U.S. Customs and Border Patrol encounters grouped by year and stacked by Land Border Region (Northern Land Border, Southern Land Border, and Other)."
+
+#installing necessary packages for my data exploration 
 library(tidytuesdayR)
 library(ggplot2)
+source("R/theme_asuva.R")
 library(readr)
 
+#loading the data set
 cbp_state <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-11-26/cbp_state.csv')
 
-
+#graphing the data in a bar chart
 ggplot(cbp_state, aes(x = fiscal_year, fill = land_border_region)) +
   geom_bar() +
   labs(title = "Customs and Border Patrol Encounters per Year", 
        x = "Fiscal Year (2020-2024)", 
        y = "Number of Encounters", 
-       fill = "Land Border Region"
-       )
+       fill = "Land Border Region") +
+    theme_asuva()
 ```
 
-The graph above shows the number of Customs and Border Patrol encounters from 2020 to 2024 in different regions of the United States. The graph implies that the most recorded encounters within this time period took place in 2023, with more than 12500 encounters recorded. By simply glancing at the graph, I am compelled to conclude that the greatest proportion of encounters took place in the region(s) that belong to the "Other" category. Unfortunately, since the data is limited, we do not know what these specific areas may be.
+The graph implies that the most recorded encounters within this time period took place in 2023, with more than 12500 encounters recorded. By simply glancing at the graph, I am compelled to conclude that the greatest proportion of encounters took place in the region(s) that belong to the “Other” category. Unfortunately, since the data is limited, we do not know what these specific areas (states, cities) may be or what type of encounter it was in particular (air, land, or sea).
 
-To check the regional proportions more accurately, I created the graph below. This takes the bar graph above but sets the y-axis to display the proportion of encounters rather than the raw count. In this graph, it is easier to identify details specific to each region. For example, 2021 is the year where the Southwest Land Border had the greatest proportion of encounters relative to other years, and 2023/2024 are the year(s) where the Northwest Land Border had the greatest proportion of encounters relative to other years.
+To check the regional proportions more accurately, I created the graph below. This takes the bar graph above but sets the y-axis to display the proportion of encounters rather than the raw count.
 
 ```{r}
+#| fig-alt: "Stacked bar chart showing proportions of U.S. Customs and Border Patrol encounters grouped by year and stacked by Land Border Region (Northern Land Border, Southern Land Border, and Other)."
+
+
 ggplot(cbp_state, aes(x = fiscal_year, fill = land_border_region)) +
   geom_bar(position="fill") +
   scale_y_continuous("Proportion of Encounters") +
   labs(title = "Customs and Border Patrol Encounters per Year", 
        x = "Fiscal Year (2020-2024)", 
        y = "Number of Encounters", 
-       fill = "Land Border Region")
+       fill = "Land Border Region") +
+  theme_asuva()
 ```
 
-Credits:
+In this graph, it is easier to identify details specific to each region. For example, 2021 is the year where the Southwest Land Border had the greatest proportion of encounters relative to other years, and 2023/2024 are the year(s) where the Northwest Land Border had the greatest proportion of encounters relative to other years.
+
+[Credits:]{.underline}
 
 **Data:** TidyTuesday U.S. Customs and Border Protection (CBP) Encounter Data, <https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-11-26/readme.md>
 
